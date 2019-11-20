@@ -1,12 +1,12 @@
 # motherducker
 SecurityLab project 3 - Team Aave
 
-* Aganovic Velid
-* Agbodzie Elom
-* Cornelissen Lana
-* Kantola Teemu
-* Koskela Pyry
-* Seppänen Waltteri
+* Velid
+* Elom
+* Lana
+* Teemu
+* Pyry
+* Waltteri
 
 
 ## TODO
