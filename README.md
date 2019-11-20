@@ -15,9 +15,9 @@ SecurityLab project 3 - Team Aave
 |:--------------------------------------------|:---------------:|:-----------------:|
 |GitHub repository                            | Pyry            |:heavy_check_mark: |
 |project management method                    |                 |:x:                |
-|webinterface tech|                           |                 |:x:                |
+|webinterface tech                            |                 |:x:                |
 |how to connect rubberducky to webinterface   |                 |:x:                |
 |hoe to ducky script                          |                 |:x:                |
-|usb to rubberducky|                          |                 |:x:                |
-|motherducker functionality|                  |                 |:x:                |
-|secure coding practices|                     |                 |:x:                |
+|usb to rubberducky                           |                 |:x:                |
+|motherducker functionality                   |                 |:x:                |
+|secure coding practices                      |                 |:x:                |
