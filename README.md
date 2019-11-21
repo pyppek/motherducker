@@ -14,10 +14,10 @@ SecurityLab project 3 - Team Aave
 | Task                                        | Assignee        | Status            |
 |:--------------------------------------------|:---------------:|:-----------------:|
 |GitHub repository                            | Pyry            |:heavy_check_mark: |
-|project management method                    | Velid           |:x:                |
+|project management method                    | Velid           |:heavy_check_mark: |
 |webinterface tech                            | Lana            |:x:                |
 |how to connect rubberducky to webinterface   | Teemu           |:x:                |
-|hoe to ducky script                          | Walde           |:x:                |
+|how to ducky script                          | Walde           |:x:                |
 |usb to rubberducky                           | Velid           |:x:                |
 |motherducker functionality                   | Pyry            |:x:                |
 |secure coding practices                      | Elom            |:x:                |
