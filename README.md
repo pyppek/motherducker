@@ -17,7 +17,7 @@ SecurityLab project 3 - Team Aave
 |project management method                    | Velid           |:heavy_check_mark: |
 |webinterface tech                            | Lana            |:x:                |
 |how to connect rubberducky to webinterface   | Teemu           |:x:                |
-|how to ducky script                          | Walde           |:x:                |
+|how to ducky script                          | Walde           |:heavy_check_mark: |
 |usb to rubberducky                           | Velid           |:x:                |
 |motherducker functionality                   | Pyry            |:x:                |
 |secure coding practices                      | Elom            |:x:                |
