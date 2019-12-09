@@ -1,4 +1,9 @@
-Django==2.2.7
+Django==2.2.8
+django-annoying==0.10.5
+django-filter==2.2.0
+django-jsonstore==0.4.1
+django-material==1.6.0
+django-viewflow==1.6.0
 psycopg2==2.8.4
 pytz==2019.3
-sqlparse==0.3.0
+six==1.13.0
