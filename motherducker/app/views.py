@@ -1,9 +1,5 @@
-from django.shortcuts import render
-from viewflow import frontend
-from viewflow.base import Flow
+from django.views.generic import TemplateView
 
-# hello world demo
 
-@frontend.register
-class HelloWorldFlow(Flow):
-    ...
+class HomePageView(TemplateView):
+    template_name = 'home.html'

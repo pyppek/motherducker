@@ -13,15 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
 from django.contrib import admin
-from django.conf.urls import include, url
-from django.views import generic
-from material.frontend import urls as frontend_urls
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('app.urls')),
     path('payloads/', include('payloads.urls')),
-    url(r'^$', generic.RedirectView.as_view(url='/workflow/', permanent=False)),
-    url(r'', include(frontend_urls)),
 ]
