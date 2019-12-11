@@ -15,12 +15,14 @@
   <nav class="deep-purple accent-3" role="navigation">
     <div class="nav-wrapper container"><a id="logo-container" href="{% url 'home' %}" class="brand-logo"><img src="{% static "images/ducky-inthewater.png" %}" alt="motherducker logo"></a>
       <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'connections' %}">Connections</a></li>
           <li><a href="{% url 'terminal' %}">Terminal</a></li>
           <li><a href="{% url 'scripts' %}">Scripts</a></li>
           <li><a href="{% url 'details' %}">Details</a></li>
       </ul>
 
       <ul id="nav-mobile" class="sidenav">
+          <li><a href="{% url 'connections' %}">Connections</a></li>
           <li><a href="{% url 'terminal' %}">Terminal</a></li>
           <li><a href="{% url 'scripts' %}">Scripts</a></li>
           <li><a href="{% url 'details' %}">Details</a></li>
