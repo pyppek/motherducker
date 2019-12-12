@@ -3,13 +3,17 @@ from asyncio import StreamReader, StreamWriter, TimeoutError, open_connection, r
 from typing import Tuple
 
 
-async def start_server(addr: Tuple[str, int]) -> None:
+async def _read(reader: StreamReader,
+                timeout: float) -> bytes:
 
-    server = await asyncio.start_server(
-        _handle, addr[0], addr[1])
+    """ Read stream from <reader> until idle for <timeout> seconds. """
 
-    async with server:
-        await server.serve_forever()
+    result = b''
+    while True:
+        try:
+            result += await wait_for(reader.read(reader._limit), timeout)
+        except TimeoutError:
+            return result
 
 
 async def send_payload(addr: Tuple[str, int],
@@ -29,28 +33,33 @@ async def send_payload(addr: Tuple[str, int],
     return response
 
 
-async def _read(reader: StreamReader,
-                timeout: float) -> bytes:
-
-    """ Read stream from <reader> until idle for <timeout> seconds. """
-
-    result = b''
-    while True:
-        try:
-            result += await wait_for(reader.read(reader._limit), timeout)
-        except TimeoutError:
-            return result
-
-
 async def _handle(reader: StreamReader,
                   writer: StreamWriter) -> None:
 
-    pass    
-    # addr = writer.get_extra_info('peername')
-    # print(f'{addr!r}')
+    data = await _read(reader, 1)
 
-    # writer.write(b'ls')
-    # await writer.drain()
+    # If there was nothing to read, assume initial connection.
+    if data == b'':
+        # Send NOP to get nothing but client UUID.
+        writer.write(b':')
+        await writer.drain()
 
-    # response = await _read(reader, 5)
-    # print(response)
+        uuid = await _read(reader, 1)
+        print(uuid)
+
+    writer.close()
+
+
+async def start_server(addr: Tuple[str, int]) -> None:
+
+    server = await asyncio.start_server(
+        _handle, addr[0], addr[1])
+
+    async with server:
+        await server.serve_forever()
+
+
+try:
+    run(start_server(('localhost', 5000)))
+except KeyboardInterrupt:
+    pass
