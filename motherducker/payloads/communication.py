@@ -6,8 +6,11 @@ from typing import Tuple
 
 async def _read(reader: StreamReader) -> bytes:
 
-    response_len = struct.unpack('<I', await reader.read(4))[0]
-    return await reader.read(response_len)
+    expected_len = struct.unpack('<I', await reader.read(4))[0]
+    response = b''
+    while len(response) < expected_len:
+        response += await reader.read(expected_len - len(response))
+    return response
 
 
 async def _send(writer: StreamWriter,
@@ -20,28 +23,32 @@ async def _send(writer: StreamWriter,
 async def _handle(reader: StreamReader,
                   writer: StreamWriter) -> None:
 
-    # Send "NOP" to get client UUID.
-    await _send(writer, b':')
     uuid = await _read(reader)
 
     print(f'{uuid.hex()} is quacking.')
 
     # Example
+    # dd if=/dev/urandom of=test.file count=1024 bs=1024
     jobs = Queue()
+    jobs.put_nowait(b'cat test.file')
     jobs.put_nowait(b'exit')
 
-    # Loop here to send payloads?
-    while True:
-        cmd = await jobs.get()
-        await _send(writer, cmd)
+    # Send payloads as they are enqueued.
+    while (cmd := await jobs.get()) != b'exit':
 
+        await _send(writer, cmd)
+        response = await _read(reader)
+
+        print(response)
+
+    await _send(writer, cmd)
     writer.close()
 
 
 async def start_server(addr: Tuple[str, int]) -> None:
 
     server = await asyncio.start_server(
-        _handle, addr[0], addr[1])
+        _handle, *addr)
 
     async with server:
         await server.serve_forever()
