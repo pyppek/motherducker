@@ -40,13 +40,16 @@ async def _handle(reader: StreamReader,
 
     # If there was nothing to read, assume initial connection.
     if data == b'':
-        # Send NOP to get nothing but client UUID.
+        # Send "NOP" to get nothing but client UUID.
         writer.write(b':')
         await writer.drain()
 
         uuid = await _read(reader, 1)
         print(uuid)
 
+    # Send "exit" to get nothing but client UUID.
+    writer.write(b'exit')
+    await writer.drain()
     writer.close()
 
 
