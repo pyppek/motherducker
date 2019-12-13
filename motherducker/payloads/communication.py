@@ -1,55 +1,40 @@
 import asyncio
-from asyncio import StreamReader, StreamWriter, TimeoutError, open_connection, run, wait_for
+from asyncio import Queue, StreamReader, StreamWriter, run
+import struct
 from typing import Tuple
 
 
-async def _read(reader: StreamReader,
-                timeout: float) -> bytes:
+async def _read(reader: StreamReader) -> bytes:
 
-    """ Read stream from <reader> until idle for <timeout> seconds. """
-
-    result = b''
-    while True:
-        try:
-            result += await wait_for(reader.read(reader._limit), timeout)
-        except TimeoutError:
-            return result
+    response_len = struct.unpack('<I', await reader.read(4))[0]
+    return await reader.read(response_len)
 
 
-async def send_payload(addr: Tuple[str, int],
-                       cmd: bytes,
-                       timeout: float = 1) -> bytes:
-
-    reader, writer = await open_connection(*addr)
+async def _send(writer: StreamWriter,
+                cmd: bytes) -> None:
 
     writer.write(cmd)
     await writer.drain()
-
-    response = await _read(reader, timeout)
-
-    writer.close()
-    await writer.wait_closed()
-
-    return response
 
 
 async def _handle(reader: StreamReader,
                   writer: StreamWriter) -> None:
 
-    data = await _read(reader, 1)
+    # Send "NOP" to get client UUID.
+    await _send(writer, b':')
+    uuid = await _read(reader)
 
-    # If there was nothing to read, assume initial connection.
-    if data == b'':
-        # Send "NOP" to get nothing but client UUID.
-        writer.write(b':')
-        await writer.drain()
+    print(f'{uuid.hex()} is quacking.')
 
-        uuid = await _read(reader, 1)
-        print(uuid)
+    # Example
+    jobs = Queue()
+    jobs.put_nowait(b'exit')
 
-    # Send "exit" to get nothing but client UUID.
-    writer.write(b'exit')
-    await writer.drain()
+    # Loop here to send payloads?
+    while True:
+        cmd = await jobs.get()
+        await _send(writer, cmd)
+
     writer.close()
 
 
