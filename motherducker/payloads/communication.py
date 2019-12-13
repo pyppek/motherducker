@@ -6,7 +6,14 @@ from typing import Tuple
 
 async def _read(reader: StreamReader) -> bytes:
 
-    expected_len = struct.unpack('<I', await reader.read(4))[0]
+    # Each message is prepended by 8 bytes representing
+    # the remaining message length. Assuming little-endian?
+    try:
+        expected_len = struct.unpack('<Q', await reader.read(8))[0]
+    except struct.error:
+        return None
+
+    # Read stream until <expected_len> bytes.
     response = b''
     while len(response) < expected_len:
         response += await reader.read(expected_len - len(response))
@@ -23,6 +30,7 @@ async def _send(writer: StreamWriter,
 async def _handle(reader: StreamReader,
                   writer: StreamWriter) -> None:
 
+    # Initial message consists of only client UUID.
     uuid = await _read(reader)
 
     print(f'{uuid.hex()} is quacking.')
@@ -33,7 +41,7 @@ async def _handle(reader: StreamReader,
     jobs.put_nowait(b'cat test.file')
     jobs.put_nowait(b'exit')
 
-    # Send payloads as they are enqueued.
+    # Send payloads as they are enqueued until "exit" is issued.
     while (cmd := await jobs.get()) != b'exit':
 
         await _send(writer, cmd)
