@@ -17,3 +17,11 @@ nav img{
 	max-height:45px!important;
 	margin-top:10px;
 }
+
+.collection .secondary-content {
+    width: 60%;
+}
+
+.collection .coll-head{
+    font-weight:bold;
+}

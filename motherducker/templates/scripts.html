@@ -5,6 +5,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
   <title>Motherducker Scripts</title>
+    <link rel="shortcut icon" href="{% static "images/favicon.ico" %}" type="image/x-icon">
+    <link rel="icon" href="{% static "images/favicon.ico" %}" type="image/x-icon">
 
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -35,7 +37,13 @@
       <br><br>
       <h1 class="header">Scripts</h1>
       <div class="row">
-          <p>scripts overview here</p>
+          <ul class="collection">
+              <li class="collection-item grey-text text-darken-4 deep-purple lighten-4 coll-head">Name<div class="secondary-content grey-text text-darken-4">Description</div>
+              </li>
+              {% for payload in payloads %}
+                <a href="#!" class="collection-item grey-text text-darken-4">{{ payload.payload_name }}<div class="secondary-content grey-text text-darken-2">{{ payload.payload_description }}</div></a>
+              {% endfor %}
+          </ul>
       </div>
     </div>
   </div>
