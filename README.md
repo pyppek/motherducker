@@ -21,17 +21,18 @@ If there are files not owned by your user 'docker':
 Then edit motherducker/settings.py and edit the DATABASE section.
 > vim motherducker/settings.py
 
-> DATABASES = { 
->     'default': { 
->         'ENGINE': 'django.db.backends.postgresql', 
->         'NAME': 'db_name', 
->         'USER': 'db_user', 
->         'PASSWORD': 'db_user', 
->         'HOST': 'db', 
->         'PORT': '5432', 
->     } 
-> } 
-
+```
+DATABASES = {  
+    'default': {  
+        'ENGINE': 'django.db.backends.postgresql',   
+        'NAME': 'db_name',   
+        'USER': 'db_user',   
+        'PASSWORD': 'db_user',   
+        'HOST': 'db',   
+        'PORT': '5432',   
+    } 
+} 
+```
 
 
 run on your project folder to start containers:
