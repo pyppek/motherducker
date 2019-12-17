@@ -1,0 +1,38 @@
+[
+  {
+    "model": "payloads.Payload",
+    "pk": 1,
+    "fields": {
+      "payload_name": "Rick Astley 4 President",
+      "payload_description": "Opens YouTube video of Rick Astley with Never Gonna Give You Up",
+      "payload": "start https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    }
+  },
+  {
+    "model": "payloads.Payload",
+    "pk": 2,
+    "fields": {
+      "payload_name": "Test script",
+      "payload_description": "This is a test script",
+      "payload": "test test test test test test"
+    }
+  },
+  {
+    "model": "payloads.Payload",
+    "pk": 3,
+    "fields": {
+      "payload_name": "Payload three",
+      "payload_description": "This is also a test script",
+      "payload": "test test test test test testtesttesttest test"
+    }
+  },
+  {
+    "model": "payloads.Payload",
+    "pk": 4,
+    "fields": {
+      "payload_name": "Payload four",
+      "payload_description": "This is also a test script",
+      "payload": "test test test test test testtesttesttest test"
+    }
+  }
+]

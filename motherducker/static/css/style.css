@@ -25,3 +25,7 @@ nav img{
 .collection .coll-head{
     font-weight:bold;
 }
+
+#index-banner {
+min-height: calc(100vh - 114px);
+}
