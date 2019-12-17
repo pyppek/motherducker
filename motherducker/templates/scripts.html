@@ -41,7 +41,10 @@
               <li class="collection-item grey-text text-darken-4 deep-purple lighten-4 coll-head">Name<div class="secondary-content grey-text text-darken-4">Description</div>
               </li>
               {% for payload in payloads %}
-                <a href="#!" class="collection-item grey-text text-darken-4">{{ payload.payload_name }}<div class="secondary-content grey-text text-darken-2">{{ payload.payload_description }}</div></a>
+                <form method="post">
+                    {% csrf_token %}
+                    <button class="collection-item grey-text text-darken-4" type="submit" name="payload" value="{{ payload.payload }}">{{ payload.payload_name }}<div class="secondary-content grey-text text-darken-2">{{ payload.payload_description }}</div></button>
+                </form>
               {% endfor %}
           </ul>
       </div>

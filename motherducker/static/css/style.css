@@ -29,3 +29,12 @@ nav img{
 #index-banner {
 min-height: calc(100vh - 114px);
 }
+
+.collection button{
+width: 100%;
+text-align:left;
+}
+
+.collection button:hover{
+background:#ede7f6;
+}
