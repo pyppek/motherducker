@@ -17,3 +17,24 @@ nav img{
 	max-height:45px!important;
 	margin-top:10px;
 }
+
+.collection .secondary-content {
+    width: 60%;
+}
+
+.collection .coll-head{
+    font-weight:bold;
+}
+
+#index-banner {
+min-height: calc(100vh - 114px);
+}
+
+.collection button{
+width: 100%;
+text-align:left;
+}
+
+.collection button:hover{
+background:#ede7f6;
+}

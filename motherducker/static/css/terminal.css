@@ -1,9 +1,9 @@
 .terminal{
   background: black;
   color: white;
-  font: courier;
+  font: monospace;
   padding: 10px;
-  height: 100px;
+  height: 60%;
   overflow: hidden;
 }
 
