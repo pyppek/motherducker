@@ -1,7 +1,8 @@
 from django.urls import path
-from . import views
+from .views import index, download_payload
+
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('shell', views.download_payload),
+    path('', index, name='index'),
+    path('shell', download_payload),
 ]
