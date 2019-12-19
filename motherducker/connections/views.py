@@ -13,6 +13,7 @@ class HomePageView(TemplateView):
 class InstallationView(TemplateView):
     template_name = 'installation.html'
 
+    # TODO put the payload to make the connection in this zip in connection_script.ino
     def download_digistump_installation(request):
         file_path = './connections/downloads/arduino-cli_0.6.0_Windows_64bit.zip'
         with open(file_path, 'rb') as f:
