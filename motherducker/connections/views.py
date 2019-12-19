@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from payloads.models import Payload
+from .models import Connection
 
 
 class HomePageView(TemplateView):
@@ -10,6 +11,16 @@ class HomePageView(TemplateView):
 
 class ConnectionsView(TemplateView):
     template_name = 'connections.html'
+
+    def get(self, request, *args, **kwargs):
+        context = super(ConnectionsView, self).get_context_data(**kwargs)
+        context['connections'] = Connection.objects.all()
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        context = {'connections': Connection.objects.all()}
+        print(request.POST.get('connection'))
+        return render(request, self.template_name, context)
 
 
 class TerminalView(TemplateView):
@@ -41,6 +52,7 @@ class ScriptsView(TemplateView):
         context = {'payloads': Payload.objects.all()}
         print(request.POST.get('payload'))
         return render(request, self.template_name, context)
+
 
 class ConnectionDetailsView(TemplateView):
     template_name = 'connection_details.html'

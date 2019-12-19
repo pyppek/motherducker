@@ -37,7 +37,16 @@
       <br><br>
       <h1 class="header">Connections</h1>
       <div class="row">
-          <p>list of connections here</p>
+          <ul class="collection">
+              <li class="collection-item grey-text text-darken-4 deep-purple lighten-4 coll-head">Name<div class="secondary-content grey-text text-darken-4">Description</div>
+              </li>
+              {% for connection in connections %}
+                <form method="post">
+                    {% csrf_token %}
+                    <button class="collection-item grey-text text-darken-4" type="submit" name="connection" value="{{ connection.uuid }}">{{ connection.uuid }}<div class="secondary-content grey-text text-darken-2"> {{ connection.name }} {{ connection.ip }} </div></button>
+                </form>
+              {% endfor %}
+          </ul>
       </div>
     </div>
   </div>
