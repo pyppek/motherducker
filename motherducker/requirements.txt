@@ -4,6 +4,7 @@ django-filter==2.2.0
 django-jsonstore==0.4.1
 django-material==1.6.0
 django-materialize==1.0.1a2
+djangorestframework==3.11.0
 paramiko==2.7.1
 psycopg2==2.8.4
 pycparser==2.19
