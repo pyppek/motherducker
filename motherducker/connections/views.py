@@ -15,7 +15,7 @@ class InstallationView(TemplateView):
 
     # TODO put the payload to make the connection in this zip in connection_script.ino
     def download_digistump_installation(request):
-        file_path = './connections/downloads/arduino-cli_0.6.0_Windows_64bit.zip'
+        file_path = './connections/install_files/arduino-cli_0.6.0_Windows_64bit.zip'
         with open(file_path, 'rb') as f:
             response = HttpResponse(f, content_type=guess_type(file_path)[0])
             response['Content-Disposition'] = 'attachment; filename=arduino-cli_0.6.0_Windows_64bit.zip'
@@ -23,7 +23,7 @@ class InstallationView(TemplateView):
             return response
 
     def download_digistump_archive(request):
-        file_path = './connections/downloads/digistump-avr-1.6.7.zip'
+        file_path = './connections/install_files/digistump-avr-1.6.7.zip'
         with open(file_path, 'rb') as f:
             response = HttpResponse(f, content_type=guess_type(file_path)[0])
             response['Content-Disposition'] = 'attachment; filename=digistump-avr-1.6.7.zip'
@@ -31,7 +31,7 @@ class InstallationView(TemplateView):
             return response
 
     def download_digistump_package(request):
-        file_path = './connections/downloads/package_digistump_index.json'
+        file_path = './connections/install_files/package_digistump_index.json'
         with open(file_path, 'rb') as f:
             response = HttpResponse(f, content_type=guess_type(file_path)[0])
             response['Content-Disposition'] = 'attachment; filename=package_digistump_index.json'
