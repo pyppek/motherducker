@@ -9,3 +9,9 @@ class Connection(models.Model):
     status = models.BooleanField(default=True)
     first_seen = models.DateTimeField(auto_now_add=True)
     last_seen = models.DateTimeField(auto_now=True)
+
+
+class TerminalData(models.Model):
+    input = models.TextField()
+    output = models.TextField()
+    added_on = models.DateTimeField(auto_now_add=True)

@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from payloads.models import Payload
-from .models import Connection
+from .models import Connection, TerminalData
 
 
 class HomePageView(TemplateView):
@@ -52,6 +52,7 @@ class TerminalView(TemplateView):
         # TODO change this so it picks it up through reverse shell which folder user resides in
         context['terminal'] = 'C:\\>'
         print(f"Your terminal input was: {request.POST.get('terminal_input')}")
+        TerminalData.objects.create(input=request.POST.get('terminal_input'), output=request.GET.get('terminal_output'))
         return render(request, self.template_name, context)
 
 
