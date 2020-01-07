@@ -65,3 +65,19 @@ background:#ede7f6;
   background: black;
   color: white;
   outline: none;
+}
+
+.installation h4{
+margin-top: 0;
+font-weight:200;
+}
+
+.installation h1{
+margin-bottom: 10px;
+}
+
+.installation h5{
+margin-top: 40px;
+font-size: 22px;
+font-weight: 600;
+}
