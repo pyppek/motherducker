@@ -19,6 +19,6 @@ class Script(models.Model):
 
 class Log(models.Model):
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE)
-    script = models.ForeignKey(Script, to_field='name', on_delete=models.DO_NOTHING)
+    script = models.ForeignKey(Script, on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)

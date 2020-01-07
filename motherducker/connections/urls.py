@@ -6,7 +6,7 @@ urlpatterns = [
     path('installation', InstallationView.as_view(), name='installation'),
     path('installation/digistump_installation', InstallationView.download_digistump_installation, name='digistump_installation'),
     path('connections', ConnectionsView.as_view(), name='connections'),
-    path('connections/terminal', TerminalView.as_view(), name='terminal'),
-    path('connections/scripts', ScriptsView.as_view(), name='scripts'),
-    path('connections/details', ConnectionDetailsView.as_view(), name='details'),
+    path('connections/<slug:uuid>/terminal', TerminalView.as_view(), name='terminal'),
+    path('connections/<slug:uuid>/scripts', ScriptsView.as_view(), name='scripts'),
+    path('connections/<slug:uuid>/details', ConnectionDetailsView.as_view(), name='details'),
 ]

