@@ -67,8 +67,9 @@ class ScriptsView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         context = {'payloads': Payload.objects.all(), 'uuid': self.kwargs.get('uuid')}
+        get_uuid = Connection.objects.get(uuid=self.kwargs.get('uuid'))
         TempData.objects.all().delete()
-        TempData.objects.create(input=request.POST.get('payload'))
+        TempData.objects.create(input=request.POST.get('payload'), connection_id=get_uuid)
         return render(request, self.template_name, context)
 
 
