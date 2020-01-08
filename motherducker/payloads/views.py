@@ -44,7 +44,7 @@ def backdoor_api(request, uuid):
         try:
             connection = Connection.objects.get(uuid=uuid)
             data = TempData.objects.get(connection_id=connection)
-            output_list = [i.input for i in TempData.objects.all()]
+            # output_list = [i.input for i in TempData.objects.all()]
             # this['value'] = output_list[-1]
             this = {'active': True, 'uuid': str(data.connection_id.uuid).upper(), 'payload': data.input}
             print(this)

@@ -11,12 +11,6 @@ class Payload(models.Model):
         return self.payload_name
 
 
-# class Script(models.Model):
-#     name = models.CharField(max_length=32, unique=True)
-#     description = models.CharField(max_length=128)
-#     content = models.TextField()
-
-
 class Log(models.Model):
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE)
     payload = models.ForeignKey(Payload, on_delete=models.CASCADE)
