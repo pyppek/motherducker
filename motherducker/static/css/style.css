@@ -18,6 +18,10 @@ nav img{
 	margin-top:10px;
 }
 
+#index-banner {
+  margin-bottom: 50px;
+}
+
 .collection .secondary-content {
     width: 60%;
 }
@@ -46,7 +50,6 @@ background:#ede7f6;
   padding: 10px;
   height: 60%;
   overflow: hidden;
-  margin-bottom: 50px;
 }
 
 .line{
