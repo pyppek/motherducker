@@ -21,6 +21,8 @@ class LogSerializer(serializers.ModelSerializer):
 
         connection, _ = Connection.objects.get_or_create(uuid=uuid.uuid)
         payloads, _ = Payload.objects.get_or_create(payload_name=payload)
+        if Log.objects.filter(payload=payloads, connection=connection).exists():
+            return Log.objects.get(connection=connection, payload=payloads)
         log, _ = Log.objects.get_or_create(connection=connection, payload=payloads, content=content)
         return log
 

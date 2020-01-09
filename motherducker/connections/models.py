@@ -13,4 +13,5 @@ class Connection(models.Model):
 
 class TempData(models.Model):
     input = models.TextField()
+    payload_name = models.TextField()
     connection_id = models.ForeignKey(Connection, on_delete=models.CASCADE)

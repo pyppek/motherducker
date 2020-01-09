@@ -45,7 +45,8 @@
               {% for payload in payloads %}
                 <form method="post">
                     {% csrf_token %}
-                    <button class="collection-item grey-text text-darken-4" type="submit" name="payload" value="{{ payload.payload }}">{{ payload.payload_name }}<div class="secondary-content grey-text text-darken-2">{{ payload.payload_description }}</div></button>
+                    <button class="collection-item grey-text text-darken-4" type="submit" name="payload" value="{{ payload.payload }} ">{{ payload.payload_name }}<div class="secondary-content grey-text text-darken-2">{{ payload.payload_description }}</div></button>
+                    <input type="hidden" value="{{ payload.payload_name }}" name="payload_name">
                 </form>
               {% endfor %}
           </ul>
