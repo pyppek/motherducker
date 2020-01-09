@@ -9,3 +9,9 @@ class Connection(models.Model):
     status = models.BooleanField(default=True)
     first_seen = models.DateTimeField(auto_now_add=True)
     last_seen = models.DateTimeField(auto_now=True)
+
+
+class TempData(models.Model):
+    input = models.TextField()
+    payload_name = models.TextField()
+    connection_id = models.ForeignKey(Connection, on_delete=models.CASCADE)
