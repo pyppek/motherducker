@@ -3,8 +3,8 @@ from mimetypes import guess_type
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from payloads.models import Payload
-from .models import Connection, TempData
+from payloads.models import Payload, TerminalLog
+from .models import Connection, ScriptData, TerminalData
 
 
 class HomePageView(TemplateView):
@@ -46,14 +46,35 @@ class TerminalView(TemplateView):
         # TODO change this so it picks it up through reverse shell which folder user resides in
         context['terminal'] = 'C:\\>'
         context['uuid'] = self.kwargs.get('uuid')
+        get_uuid = Connection.objects.get(uuid=self.kwargs.get('uuid'))
+        try:
+            terminalstuff = TerminalLog.objects.get(connection=get_uuid)
+            print(terminalstuff)
+            context['terminal'] = terminalstuff.current_directory
+            context['terminal_output'] = TerminalLog.objects.filter(connection=get_uuid).latest('content')
+        except:
+            pass
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         context = {}
         # TODO change this so it picks it up through reverse shell which folder user resides in
+        print(f'this is the post: {request.POST}')
         context['terminal'] = 'C:\\>'
         context['uuid'] = self.kwargs.get('uuid')
-        print(f"Your terminal input was: {request.POST.get('terminal_input')}")
+        get_uuid = Connection.objects.get(uuid=self.kwargs.get('uuid'))
+        try:
+            terminalstuff = TerminalLog.objects.get(connection=get_uuid)
+            print(terminalstuff)
+            context['terminal'] = terminalstuff.current_directory
+            context['terminal_output'] = TerminalLog.objects.filter(connection=get_uuid).latest('content')
+            TerminalData.objects.all().delete()
+            TerminalData.objects.create(input=request.POST.get('terminal_input'),
+                                        connection_id=get_uuid)
+        except:
+            TerminalData.objects.all().delete()
+            TerminalData.objects.create(input=request.POST.get('terminal_input'),
+                                        connection_id=get_uuid)
         return render(request, self.template_name, context)
 
 
@@ -68,10 +89,10 @@ class ScriptsView(TemplateView):
     def post(self, request, *args, **kwargs):
         context = {'payloads': Payload.objects.all(), 'uuid': self.kwargs.get('uuid')}
         get_uuid = Connection.objects.get(uuid=self.kwargs.get('uuid'))
-        TempData.objects.all().delete()
-        TempData.objects.create(input=request.POST.get('payload'),
-                                payload_name=request.POST.get('payload_name'),
-                                connection_id=get_uuid)
+        ScriptData.objects.all().delete()
+        ScriptData.objects.create(input=request.POST.get('payload'),
+                                  payload_name=request.POST.get('payload_name'),
+                                  connection_id=get_uuid)
         return render(request, self.template_name, context)
 
 

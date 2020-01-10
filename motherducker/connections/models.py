@@ -11,7 +11,10 @@ class Connection(models.Model):
     last_seen = models.DateTimeField(auto_now=True)
 
 
-class TempData(models.Model):
+class TerminalData(models.Model):
     input = models.TextField()
-    payload_name = models.TextField()
     connection_id = models.ForeignKey(Connection, on_delete=models.CASCADE)
+
+
+class ScriptData(TerminalData):
+    payload_name = models.TextField()

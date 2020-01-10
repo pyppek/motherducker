@@ -1,17 +1,11 @@
 from rest_framework import serializers
-from .models import Log, Payload
+from .models import ScriptLog, TerminalLog, Payload
 from connections.models import Connection
 
 
-# class ScriptSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Script
-#         fields = '__all__'
-
-
-class LogSerializer(serializers.ModelSerializer):
+class ScriptLogSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Log
+        model = ScriptLog
         fields = '__all__'
 
     def create(self, validated_data):
@@ -21,10 +15,24 @@ class LogSerializer(serializers.ModelSerializer):
 
         connection, _ = Connection.objects.get_or_create(uuid=uuid.uuid)
         payloads, _ = Payload.objects.get_or_create(payload_name=payload)
-        if Log.objects.filter(payload=payloads, connection=connection).exists():
-            return Log.objects.get(connection=connection, payload=payloads)
-        log, _ = Log.objects.get_or_create(connection=connection, payload=payloads, content=content)
-        return log
+        if ScriptLog.objects.filter(payload=payloads, connection=connection).exists():
+            return ScriptLog.objects.get(connection=connection, payload=payloads)
+        script_log, _ = ScriptLog.objects.get_or_create(connection=connection, payload=payloads, content=content)
+        return script_log
+
+
+class TerminalLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TerminalLog
+        fields = '__all__'
+
+    def create(self, validated_data):
+        uuid = validated_data.pop('connection')
+        content = validated_data.pop('content')
+        current_dir = validated_data.pop('current_directory')
+        connection, _ = Connection.objects.get_or_create(uuid=uuid.uuid)
+        terminal_log, _ = TerminalLog.objects.get_or_create(connection=connection, content=content, current_directory=current_dir)
+        return terminal_log
 
 
 class ConnectionSerializer(serializers.ModelSerializer):

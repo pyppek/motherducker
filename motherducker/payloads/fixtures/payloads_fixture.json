@@ -62,4 +62,5 @@
       "payload": "$info = [ordered]@{}\n\n$OSWmi = Get-WmiObject Win32_OperatingSystem\n$OSWmiProps = @(\"Caption\", \"Version\", \"CSName\")\n$OSInfo = @($OSWmi, $OSWmiProps, \"OS\")\n\n$KeyWmi = Get-WmiObject SoftwareLicensingService\n$KeyWmiProps = @(\"OA3xOriginalProductKey\")\n$KeyInfo = @($KeyWmi, $KeyWmiProps)\n\n$CPUWmi = Get-WmiObject Win32_Processor\n$CPUWmiProps = @(\"DeviceID\", \"Name\", \"Caption\", \"MaxClockSpeed\", \"SocketDesignation\")\n$CPUInfo = @($CPUWmi, $CPUWmiProps, \"CPU\")\n\n$GPUWmi = Get-WmiObject Win32_VideoController\n$GPUWmiProps = @(\"DeviceID\", \"Name\", \"AdapterRAM\", \"VideoModeDescription\", \"MaxRefreshRate\", \"MinRefreshRate\")\n$GPUInfo = @($GPUWmi, $GPUWmiProps, \"GPU\")\n\n$RAMWmi = Get-WmiObject Win32_PhysicalMemory\n$RAMWmiProps = @(\"Manufacturer\", \"PartNumber\", \"ConfiguredClockSpeed\", \"Speed\", \"DeviceLocator\", \"DataWidth\")\n$RAMInfo = @($RAMWmi, $RAMWmiProps. \"RAM\")\n\n$info = @($OSInfo, $KeyInfo, $CPUInfo, $GPUInfo, $RAMInfo)\n$output = [ordered]@{}\n\nforeach($object in $info){\n    foreach($str in $object[1]){\n        $output[$object[2] + $str] = $object[0].$str\n    }\n}"
     }
   }
+
 ]
