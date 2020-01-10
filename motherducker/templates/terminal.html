@@ -46,15 +46,15 @@
           <div class="terminal">
           <div id="history">
               <!-- Add jinja functionality for history here -->
+              {{history}}
           </div>
               <form method="post">
-          <div class="line">
-              <span id="path">{{terminal}}&nbsp;</span>
-                  {% csrf_token %}
-                <input type="text" name="terminal_input">
-
-            </div>
-                   </form>
+                  <div class="line">
+                      <span id="path">{{terminal}}&nbsp;</span>
+                          {% csrf_token %}
+                      <input type="text" name="terminal_input">
+                  </div>
+              </form>
         </div>
       </div>
     </div>

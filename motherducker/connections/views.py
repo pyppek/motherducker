@@ -1,9 +1,10 @@
+import queue
 from mimetypes import guess_type
 
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from payloads.models import Payload
+from payloads.models import Payload, TerminalHistory
 from .models import Connection, TempData
 
 
@@ -41,11 +42,15 @@ class ConnectionsView(TemplateView):
 class TerminalView(TemplateView):
     template_name = 'terminal.html'
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     def get(self, request, *args, **kwargs):
         context = {}
         # TODO change this so it picks it up through reverse shell which folder user resides in
         context['terminal'] = 'C:\\>'
         context['uuid'] = self.kwargs.get('uuid')
+
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
@@ -53,7 +58,15 @@ class TerminalView(TemplateView):
         # TODO change this so it picks it up through reverse shell which folder user resides in
         context['terminal'] = 'C:\\>'
         context['uuid'] = self.kwargs.get('uuid')
-        print(f"Your terminal input was: {request.POST.get('terminal_input')}")
+        input = request.POST.get('terminal_input')
+        print(f"Your terminal input was: {input}")
+
+        context['history'] = TerminalHistory.objects.all()
+        print(f"HISTORY: {context['history']}")
+
+        TerminalHistory.objects.create(command=input,
+                                    connection=Connection.objects.get(uuid=context['uuid']))
+
         return render(request, self.template_name, context)
 
 
