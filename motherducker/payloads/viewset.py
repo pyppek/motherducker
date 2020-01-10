@@ -1,13 +1,18 @@
 from rest_framework import viewsets
-from .serializers import LogSerializer, ConnectionSerializer, PayloadSerializer
-from .models import Log, Payload
+from .serializers import ScriptLogSerializer, TerminalLogSerializer, ConnectionSerializer, PayloadSerializer
+from .models import ScriptLog, TerminalLog, Payload
 from connections.models import Connection
 from django_filters.rest_framework import DjangoFilterBackend
 
 
-class LogViewSet(viewsets.ModelViewSet):
-    serializer_class = LogSerializer
-    queryset = Log.objects.all()
+class ScriptLogViewSet(viewsets.ModelViewSet):
+    serializer_class = ScriptLogSerializer
+    queryset = ScriptLog.objects.all()
+
+
+class TerminalLogViewSet(viewsets.ModelViewSet):
+    serializer_class = TerminalLogSerializer
+    queryset = TerminalLog.objects.all()
 
 
 class ConnectionViewSet(viewsets.ModelViewSet):

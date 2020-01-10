@@ -16,10 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from payloads.viewset import LogViewSet, ConnectionViewSet, PayloadViewSet
+from payloads.viewset import ScriptLogViewSet, TerminalLogViewSet, ConnectionViewSet, PayloadViewSet
 
 router = routers.SimpleRouter()
-router.register(r'log', LogViewSet)
+router.register(r'script_log', ScriptLogViewSet)
+router.register(r'terminal_log', TerminalLogViewSet)
 router.register(r'register', ConnectionViewSet)
 router.register(r'payload', PayloadViewSet)
 

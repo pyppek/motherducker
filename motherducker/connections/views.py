@@ -1,11 +1,9 @@
-import queue
 from mimetypes import guess_type
-
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from payloads.models import Payload, TerminalHistory
-from .models import Connection, TempData
+from payloads.models import Payload, TerminalLog, TerminalHistory
+from .models import Connection, ScriptData, TerminalData
 
 
 class HomePageView(TemplateView):
@@ -50,22 +48,49 @@ class TerminalView(TemplateView):
         # TODO change this so it picks it up through reverse shell which folder user resides in
         context['terminal'] = 'C:\\>'
         context['uuid'] = self.kwargs.get('uuid')
-
+        get_uuid = Connection.objects.get(uuid=self.kwargs.get('uuid'))
+        try:
+            terminalstuff = TerminalLog.objects.get(connection=get_uuid)
+            print(terminalstuff)
+            context['terminal'] = terminalstuff.current_directory
+            context['terminal_output'] = TerminalLog.objects.filter(connection=get_uuid).latest('content')
+        except:
+            pass
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         context = {}
         # TODO change this so it picks it up through reverse shell which folder user resides in
+        print(f'this is the post: {request.POST}')
         context['terminal'] = 'C:\\>'
         context['uuid'] = self.kwargs.get('uuid')
-        input = request.POST.get('terminal_input')
-        print(f"Your terminal input was: {input}")
+        get_uuid = Connection.objects.get(uuid=self.kwargs.get('uuid'))
 
-        context['history'] = TerminalHistory.objects.all()
-        print(f"HISTORY: {context['history']}")
+        input = request.POST.get('terminal_input')
+        context['history'] = TerminalHistory.objects.filter(connection=get_uuid)
+
+        try:
+            terminalstuff = TerminalLog.objects.get(connection=get_uuid)
+            print(terminalstuff)
+            context['terminal'] = terminalstuff.current_directory
+            context['terminal_output'] = TerminalLog.objects.filter(connection=get_uuid).latest('content')
+            TerminalData.objects.all().delete()
+            TerminalData.objects.create(input=input,
+                                        connection_id=get_uuid)
+        except:
+            TerminalData.objects.all().delete()
+            TerminalData.objects.create(input=input,
+                                        connection_id=get_uuid)
 
         TerminalHistory.objects.create(command=input,
-                                    connection=Connection.objects.get(uuid=context['uuid']))
+                                connection = get_uuid)
+
+        # TODO also delete terminal history when connection is lost or after a day or something?
+        # only keep the most recent 6 lines from the terminal history (delete older ones)
+        if TerminalHistory.objects.filter(connection=get_uuid).count() > 5:
+            max_datetime = TerminalHistory.objects.order_by('-timestamp')[5]
+            delete_older = TerminalHistory.objects.filter(timestamp__lt=max_datetime.timestamp)
+            delete_older.delete()
 
         return render(request, self.template_name, context)
 
@@ -81,10 +106,10 @@ class ScriptsView(TemplateView):
     def post(self, request, *args, **kwargs):
         context = {'payloads': Payload.objects.all(), 'uuid': self.kwargs.get('uuid')}
         get_uuid = Connection.objects.get(uuid=self.kwargs.get('uuid'))
-        TempData.objects.all().delete()
-        TempData.objects.create(input=request.POST.get('payload'),
-                                payload_name=request.POST.get('payload_name'),
-                                connection_id=get_uuid)
+        ScriptData.objects.all().delete()
+        ScriptData.objects.create(input=request.POST.get('payload'),
+                                  payload_name=request.POST.get('payload_name'),
+                                  connection_id=get_uuid)
         return render(request, self.template_name, context)
 
 
