@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from payloads.models import Payload, TerminalLog
 from .models import Connection, ScriptData, TerminalData
+import time
 
 
 class HomePageView(TemplateView):
@@ -34,7 +35,6 @@ class ConnectionsView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         context = {'connections': Connection.objects.all()}
-        print(request.POST.get('connection'))
         return render(request, self.template_name, context)
 
 
@@ -42,32 +42,28 @@ class TerminalView(TemplateView):
     template_name = 'terminal.html'
 
     def get(self, request, *args, **kwargs):
+        time.sleep(3)
         context = {}
-        # TODO change this so it picks it up through reverse shell which folder user resides in
         context['terminal'] = 'C:\\>'
         context['uuid'] = self.kwargs.get('uuid')
         get_uuid = Connection.objects.get(uuid=self.kwargs.get('uuid'))
         try:
-            terminalstuff = TerminalLog.objects.get(connection=get_uuid)
-            print(terminalstuff)
-            context['terminal'] = terminalstuff.current_directory
-            context['terminal_output'] = TerminalLog.objects.filter(connection=get_uuid).latest('content')
+            terminal_data = TerminalLog.objects.filter(connection=get_uuid).latest('id')
+            context['terminal'] = terminal_data.current_directory
+            context['terminal_output'] = terminal_data.content
         except:
             pass
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         context = {}
-        # TODO change this so it picks it up through reverse shell which folder user resides in
-        print(f'this is the post: {request.POST}')
         context['terminal'] = 'C:\\>'
         context['uuid'] = self.kwargs.get('uuid')
         get_uuid = Connection.objects.get(uuid=self.kwargs.get('uuid'))
         try:
-            terminalstuff = TerminalLog.objects.get(connection=get_uuid)
-            print(terminalstuff)
-            context['terminal'] = terminalstuff.current_directory
-            context['terminal_output'] = TerminalLog.objects.filter(connection=get_uuid).latest('content')
+            terminal_data = TerminalLog.objects.filter(connection=get_uuid).latest('id')
+            context['terminal'] = terminal_data.current_directory
+            context['terminal_output'] = terminal_data.content
             TerminalData.objects.all().delete()
             TerminalData.objects.create(input=request.POST.get('terminal_input'),
                                         connection_id=get_uuid)
@@ -75,7 +71,7 @@ class TerminalView(TemplateView):
             TerminalData.objects.all().delete()
             TerminalData.objects.create(input=request.POST.get('terminal_input'),
                                         connection_id=get_uuid)
-        return render(request, self.template_name, context)
+        return TerminalView.get(self, request, *args, **kwargs)
 
 
 class ScriptsView(TemplateView):
