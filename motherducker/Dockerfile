@@ -1,7 +1,8 @@
-FROM python:3
+FROM python:3.7
 ENV PYTHONUNBUFFERED 1
-RUN mkdir /code
-WORKDIR /code
-COPY requirements.txt /code/
-RUN pip install -r /code/requirements.txt
-COPY . /code/
+
+COPY requirements.txt /tmp/
+RUN pip install -r /tmp/requirements.txt
+
+WORKDIR /opt/motherducker
+COPY . /opt/motherducker/
