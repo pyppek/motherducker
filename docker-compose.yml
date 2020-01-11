@@ -30,3 +30,4 @@ services:
                 - '${WEB_PORT}:${WEB_PORT}'
             depends_on:
                 - db
+            restart: on-failure
