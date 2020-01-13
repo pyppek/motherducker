@@ -47,8 +47,8 @@ background:#ede7f6;
   background: black;
   color: white;
   font: monospace;
-  padding: 10px;
-  height: 60%;
+  padding: 30px 25px;
+  min-height: 60%;
   overflow: hidden;
 }
 
@@ -58,8 +58,10 @@ background:#ede7f6;
 }
 
 .terminal span#path{
-  display:table-cell;
-  width:1px;
+  display:inline-block;
+  width:17%;
+  padding-right: 20px;
+vertical-align: bottom;
 }
 
 .terminal .timestamp{
@@ -69,13 +71,18 @@ margin-right: 10px;
 .terminal .command{
 font-weight:600}
 
+.terminal form{
+margin:30px 0;
+}
+
 .terminal input{
-  display:table-cell;
-  width:100%;
+  display:inline-block;
+  width:82%!important;
   border: none;
   background: black;
   color: white;
   outline: none;
+  vertical-align: bottom;
 }
 
 .installation h4{
@@ -108,4 +115,10 @@ font-weight: 300;
 overflow-y: scroll;
 word-wrap: break-word;
 height:324px;
+}
+
+.terminal_output{
+overflow-y: scroll;
+word-wrap: break-word;
+height:200px;
 }
