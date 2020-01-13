@@ -53,13 +53,16 @@
               {% endfor %}
           </div>
               <form method="post">
-                <div class="line">
-                    <span id="path">{{terminal}}&nbsp;</span>
-                        {% csrf_token %}
-                    <input type="text" name="terminal_input">
-                </div>
-              </form>
-              {{terminal_output.content}}
+          <div class="line">
+              <span id="path">{{terminal}}&nbsp;</span>
+                  {% csrf_token %}
+                <input type="text" name="terminal_input">
+
+            </div>
+                   </form>
+              <div style="height:550px;width:1250px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
+              {{terminal_output}}
+              </div>
         </div>
       </div>
     </div>
