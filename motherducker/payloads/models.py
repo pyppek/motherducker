@@ -17,12 +17,18 @@ class TerminalLog(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     current_directory = models.TextField(blank=True, null=True)
 
+    def __str__(self):
+        return self.content
+
 
 class ScriptLog(models.Model):
     payload = models.ForeignKey(Payload, on_delete=models.CASCADE)
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.content
 
 
 class TerminalHistory(models.Model):

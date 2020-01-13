@@ -2,7 +2,7 @@ from mimetypes import guess_type
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from payloads.models import Payload, TerminalLog, TerminalHistory
+from payloads.models import Payload, TerminalLog, ScriptLog, TerminalHistory
 from .models import Connection, ScriptData, TerminalData
 import time
 
@@ -117,6 +117,9 @@ class ConnectionDetailsView(TemplateView):
     def get(self, request, *args, **kwargs):
         context = super(ConnectionDetailsView, self).get_context_data(**kwargs)
         context['uuid'] = self.kwargs.get('uuid')
+        context['connection'] = Connection.objects.get(uuid=context['uuid'])
+        context['terminal_log'] = TerminalLog.objects.filter(connection=context['connection'])
+        context['script_log'] = ScriptLog.objects.filter(connection=context['connection'])
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
