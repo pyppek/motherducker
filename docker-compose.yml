@@ -1,0 +1,33 @@
+version: '3.3'
+
+services:
+        db:
+            image: postgres
+            environment: 
+                - POSTGRES_DB=${DB_NAME}
+                - POSTGRES_USER=${DB_USER}
+                - POSTGRES_PASSWORD=${DB_PASS}
+            volumes:
+                - ./motherducker/data:/var/lib/postgresql/data
+        web:
+            environment: 
+                - SECRET=${SECRET}
+                - WEB_HOST=${WEB_HOST}
+                - DB_NAME=${DB_NAME}
+                - DB_USER=${DB_USER}
+                - DB_PASS=${DB_PASS}
+                - DB_HOST=${DB_HOST}
+                - DB_PORT=${DB_PORT}
+            build: .
+            command: >
+                sh -c
+                'python manage.py makemigrations &&
+                python manage.py migrate &&
+                python manage.py runserver ${WEB_HOST}:${WEB_PORT}'
+            volumes:
+                - .:/code
+            ports:
+                - '${WEB_PORT}:${WEB_PORT}'
+            depends_on:
+                - db
+            restart: on-failure
