@@ -44,8 +44,13 @@
       <h1 class="header">Terminal</h1>
       <div class="row">
           <div class="terminal">
-          <div id="history">
-              <!-- Add jinja functionality for history here -->
+          <div id="history" class="grey-text text-darken-1">
+              {% for line in history %}
+
+              {% csrf_token %}
+              <span class="timestamp">{{ line.timestamp|date:'Y-m-d H:i' }}</span><span class="command">{{ line.command }}</span><br>
+
+              {% endfor %}
           </div>
               <form method="post">
           <div class="line">

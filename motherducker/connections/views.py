@@ -1,9 +1,8 @@
 from mimetypes import guess_type
-
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from payloads.models import Payload, TerminalLog
+from payloads.models import Payload, TerminalLog, TerminalHistory
 from .models import Connection, ScriptData, TerminalData
 import time
 
@@ -41,6 +40,9 @@ class ConnectionsView(TemplateView):
 class TerminalView(TemplateView):
     template_name = 'terminal.html'
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     def get(self, request, *args, **kwargs):
         time.sleep(3)
         context = {}
@@ -60,18 +62,35 @@ class TerminalView(TemplateView):
         context['terminal'] = 'C:\\>'
         context['uuid'] = self.kwargs.get('uuid')
         get_uuid = Connection.objects.get(uuid=self.kwargs.get('uuid'))
+
+        input = request.POST.get('terminal_input')
+        context['history'] = TerminalHistory.objects.filter(connection=get_uuid)
+
         try:
             terminal_data = TerminalLog.objects.filter(connection=get_uuid).latest('id')
             context['terminal'] = terminal_data.current_directory
             context['terminal_output'] = terminal_data.content
             TerminalData.objects.all().delete()
-            TerminalData.objects.create(input=request.POST.get('terminal_input'),
+            TerminalData.objects.create(input=input,
                                         connection_id=get_uuid)
         except:
             TerminalData.objects.all().delete()
-            TerminalData.objects.create(input=request.POST.get('terminal_input'),
+            TerminalData.objects.create(input=input,
                                         connection_id=get_uuid)
+
+        TerminalHistory.objects.create(command=input,
+                                connection = get_uuid)
+
+        # TODO also delete terminal history when connection is lost or after a day or something?
+        # only keep the most recent 6 lines from the terminal history (delete older ones)
+        if TerminalHistory.objects.filter(connection=get_uuid).count() > 5:
+            max_datetime = TerminalHistory.objects.order_by('-timestamp')[5]
+            delete_older = TerminalHistory.objects.filter(timestamp__lt=max_datetime.timestamp)
+            delete_older.delete()
+
+
         return TerminalView.get(self, request, *args, **kwargs)
+
 
 
 class ScriptsView(TemplateView):

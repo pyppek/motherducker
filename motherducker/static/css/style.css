@@ -57,10 +57,17 @@ background:#ede7f6;
   width: 100%;
 }
 
-.terminal span{
+.terminal span#path{
   display:table-cell;
   width:1px;
 }
+
+.terminal .timestamp{
+margin-right: 10px;
+}
+
+.terminal .command{
+font-weight:600}
 
 .terminal input{
   display:table-cell;
