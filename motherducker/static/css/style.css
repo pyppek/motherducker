@@ -17,3 +17,95 @@ nav img{
 	max-height:45px!important;
 	margin-top:10px;
 }
+
+#index-banner {
+  margin-bottom: 50px;
+}
+
+.collection .secondary-content {
+    width: 60%;
+}
+
+.collection .coll-head{
+    font-weight:bold;
+}
+
+#index-banner {
+min-height: calc(100vh - 114px);
+}
+
+.collection button{
+width: 100%;
+text-align:left;
+}
+
+.collection button:hover{
+background:#ede7f6;
+}
+
+.terminal{
+  background: black;
+  color: white;
+  font: monospace;
+  padding: 10px;
+  height: 60%;
+  overflow: hidden;
+}
+
+.line{
+  display: table;
+  width: 100%;
+}
+
+.terminal span#path{
+  display:table-cell;
+  width:1px;
+}
+
+.terminal .timestamp{
+margin-right: 10px;
+}
+
+.terminal .command{
+font-weight:600}
+
+.terminal input{
+  display:table-cell;
+  width:100%;
+  border: none;
+  background: black;
+  color: white;
+  outline: none;
+}
+
+.installation h4{
+margin-top: 0;
+font-weight:200;
+}
+
+.installation h1{
+margin-bottom: 10px;
+}
+
+.installation h5{
+margin-top: 40px;
+font-size: 22px;
+font-weight: 600;
+}
+
+.row span.label{
+font-weight: bold;
+min-width: 35%;
+display: inline-block;
+}
+
+.card-title{
+font-size: 24px;
+font-weight: 300;
+}
+
+.scroll{
+overflow-y: scroll;
+word-wrap: break-word;
+height:324px;
+}

@@ -1,31 +1,39 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Motherducker Terminal</title>
 
-  <!-- CSS  -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="{% static "css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
-</head>
-<body class="grey darken-3">
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+        <title>Motherducker Terminal</title>
+
+        <!-- CSS  -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="{% static "css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+        <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+
+       <!-- Scripts -->
+        <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script src="{% static "js/materialize.js" %}"></script>
+        <script src="{% static "js/init.js" %}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    </head>
+    <body class="grey darken-3">
   <nav class="deep-purple accent-3" role="navigation">
     <div class="nav-wrapper container"><a id="logo-container" href="{% url 'home' %}" class="brand-logo"><img src="{% static "images/ducky-inthewater.png" %}" alt="motherducker logo"></a>
       <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'installation' %}">Installation</a></li>
           <li><a href="{% url 'connections' %}">Connections</a></li>
-          <li><a href="{% url 'terminal' %}">Terminal</a></li>
-          <li><a href="{% url 'scripts' %}">Scripts</a></li>
-          <li><a href="{% url 'details' %}">Details</a></li>
+          <li><a href="{% url 'terminal' uuid=uuid%}">Terminal</a></li>
+          <li><a href="{% url 'scripts' uuid=uuid%}">Scripts</a></li>
+          <li><a href="{% url 'details' uuid=uuid %}">Details</a></li>
       </ul>
 
       <ul id="nav-mobile" class="sidenav">
+          <li><a href="{% url 'installation' %}">Installation</a></li>
           <li><a href="{% url 'connections' %}">Connections</a></li>
-          <li><a href="{% url 'terminal' %}">Terminal</a></li>
-          <li><a href="{% url 'scripts' %}">Scripts</a></li>
-          <li><a href="{% url 'details' %}">Details</a></li>
+          <li><a href="{% url 'terminal' uuid=uuid %}">Terminal</a></li>
+          <li><a href="{% url 'scripts' uuid=uuid %}">Scripts</a></li>
+          <li><a href="{% url 'details' uuid=uuid %}">Details</a></li>
       </ul>
       <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     </div>
@@ -35,11 +43,30 @@
       <br><br>
       <h1 class="header">Terminal</h1>
       <div class="row">
-          <p></p>
+          <div class="terminal">
+          <div id="history" class="grey-text text-darken-1">
+              {% for line in history %}
+
+              {% csrf_token %}
+              <span class="timestamp">{{ line.timestamp|date:'Y-m-d H:i' }}</span><span class="command">{{ line.command }}</span><br>
+
+              {% endfor %}
+          </div>
+              <form method="post">
+          <div class="line">
+              <span id="path">{{terminal}}&nbsp;</span>
+                  {% csrf_token %}
+                <input type="text" name="terminal_input">
+
+            </div>
+                   </form>
+              <div style="height:550px;width:1250px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
+              {{terminal_output}}
+              </div>
+        </div>
       </div>
     </div>
   </div>
-
   <footer class="page-footer grey darken-4">
     <div class="footer-copyright">
       <div class="container">
@@ -47,12 +74,6 @@
       </div>
     </div>
   </footer>
-
-
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="{% static "js/materialize.js" %}"></script>
-  <script src="{% static "js/init.js" %}"></script>
-
-  </body>
+    </body>
 </html>
+

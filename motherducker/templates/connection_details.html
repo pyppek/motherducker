@@ -2,30 +2,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Motherducker Connection Details</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>Motherducker Connection Details</title>
+    <link rel="shortcut icon" href="{% static "images/favicon.ico" %}" type="image/x-icon">
+    <link rel="icon" href="{% static "images/favicon.ico" %}" type="image/x-icon">
 
-  <!-- CSS  -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="{% static "css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="{% static "css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body class="grey darken-3">
   <nav class="deep-purple accent-3" role="navigation">
     <div class="nav-wrapper container"><a id="logo-container" href="{% url 'home' %}" class="brand-logo"><img src="{% static "images/ducky-inthewater.png" %}" alt="motherducker logo"></a>
       <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'installation' %}">Installation</a></li>
           <li><a href="{% url 'connections' %}">Connections</a></li>
-          <li><a href="{% url 'terminal' %}">Terminal</a></li>
-          <li><a href="{% url 'scripts' %}">Scripts</a></li>
-          <li><a href="{% url 'details' %}">Details</a></li>
+          <li><a href="{% url 'terminal' uuid=uuid%}">Terminal</a></li>
+          <li><a href="{% url 'scripts' uuid=uuid%}">Scripts</a></li>
+          <li><a href="{% url 'details' uuid=uuid%}">Details</a></li>
       </ul>
 
       <ul id="nav-mobile" class="sidenav">
+          <li><a href="{% url 'installation' %}">Installation</a></li>
           <li><a href="{% url 'connections' %}">Connections</a></li>
-          <li><a href="{% url 'terminal' %}">Terminal</a></li>
-          <li><a href="{% url 'scripts' %}">Scripts</a></li>
-          <li><a href="{% url 'details' %}">Details</a></li>
+          <li><a href="{% url 'terminal' uuid=uuid %}">Terminal</a></li>
+          <li><a href="{% url 'scripts' uuid=uuid %}">Scripts</a></li>
+          <li><a href="{% url 'details' uuid=uuid %}">Details</a></li>
       </ul>
       <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     </div>
@@ -35,7 +39,43 @@
       <br><br>
       <h1 class="header">Connection details</h1>
       <div class="row">
-          <p></p>
+          <div class="col s12 m5">
+              <div class="card-panel deep-purple lighten-4 grey-text text-darken-4">
+                  <div class="card-content">
+                      <span class="card-title">Information</span>
+                      <p><span class="label">Name: </span>{{ connection.name }}</p>
+                      <p><span class="label">Description: </span>{{ connection.description }}</p>
+                      <p><span class="label">IP address: </span>{{ connection.ip }}</p>
+                      <p><span class="label">Status: </span>{{ connection.status }}</p>
+                      <p><span class="label">First seen: </span>{{ connection.first_seen }}</p>
+                      <p><span class="label">Last seen: </span>{{ connection.last_seen }}</p>
+                  </div>
+              </div>
+          </div>
+          <div class="col s12 m5">
+              <div id="scrollcard" class="card-panel grey darken-4 scroll">
+                  <div class="card-content">
+                      <span class="card-title">Script Log</span>
+                      {% for log in script_log %}
+                        {% csrf_token %}
+                        <p>{{ log.timestamp|date:'Y-m-d H:i' }}<br>
+                            Payload executed: {{ log.payload }}<br>
+                            Log: <span class="deep-purple-text text-lighten-2">{{ log.content }}</span></p>
+                      {% endfor %}
+                  </div>
+              </div>
+              <div id="scrollcard" class="card-panel grey darken-4 scroll">
+                  <div class="card-content">
+                      <span class="card-title">Terminal Log</span>
+                        {% for log in terminal_log %}
+                        {% csrf_token %}
+                        <p>{{ log.timestamp|date:'Y-m-d H:i' }}<br>
+                            Current directory: {{ log.current_directory }}<br>
+                            Log: <span class="deep-purple-text text-lighten-2">{{ log.content }}</span></p>
+                      {% endfor %}
+                  </div>
+              </div>
+          </div>
       </div>
     </div>
   </div>
@@ -51,8 +91,9 @@
 
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script>var card = document.getElementById("scrollcard");
+  card.scrollTop = card.scrollHeight;</script>
   <script src="{% static "js/materialize.js" %}"></script>
   <script src="{% static "js/init.js" %}"></script>
-
   </body>
 </html>
