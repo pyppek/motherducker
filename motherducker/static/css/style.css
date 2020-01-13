@@ -109,12 +109,15 @@ display: inline-block;
 .card-title{
 font-size: 24px;
 font-weight: 300;
+padding-bottom:15px;
+display:block;
 }
 
 .scroll{
 overflow-y: scroll;
 word-wrap: break-word;
-height:324px;
+height:241px;
+padding-right:25px;
 }
 
 .terminal_output{
@@ -122,3 +125,6 @@ overflow-y: scroll;
 word-wrap: break-word;
 height:200px;
 }
+
+.card-panel.grey{
+padding-right:0;}

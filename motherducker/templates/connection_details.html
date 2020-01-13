@@ -53,26 +53,30 @@
               </div>
           </div>
           <div class="col s12 m5">
-              <div id="scrollcard1" class="card-panel grey darken-4 scroll">
+              <div class="card-panel grey darken-4">
                   <div class="card-content">
                       <span class="card-title">Script Log</span>
+                      <div id="scrollcard1" class="scroll">
                       {% for log in script_log %}
                         {% csrf_token %}
                         <p>{{ log.timestamp|date:'Y-m-d H:i' }}<br>
                             Payload executed: {{ log.payload }}<br>
                             Log: <span class="deep-purple-text text-lighten-2">{{ log.content }}</span></p>
                       {% endfor %}
+                      </div>
                   </div>
               </div>
-              <div id="scrollcard2" class="card-panel grey darken-4 scroll">
+              <div class="card-panel grey darken-4">
                   <div class="card-content">
                       <span class="card-title">Terminal Log</span>
+                      <div id="scrollcard2" class="scroll">
                         {% for log in terminal_log %}
                         {% csrf_token %}
                         <p>{{ log.timestamp|date:'Y-m-d H:i' }}<br>
-                            Current directory: {{ log.current_directory }}<br>
+                            Directory: {{ log.current_directory }}<br>
                             Log: <span class="deep-purple-text text-lighten-2">{{ log.content }}</span></p>
                       {% endfor %}
+                      </div>
                   </div>
               </div>
           </div>
