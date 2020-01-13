@@ -48,11 +48,13 @@ class TerminalView(TemplateView):
         context = {}
         context['terminal'] = 'C:\\>'
         context['uuid'] = self.kwargs.get('uuid')
+        context['history'] = TerminalHistory.objects.filter(connection=self.kwargs.get('uuid'))
         get_uuid = Connection.objects.get(uuid=self.kwargs.get('uuid'))
         try:
             terminal_data = TerminalLog.objects.filter(connection=get_uuid).latest('id')
             context['terminal'] = terminal_data.current_directory
             context['terminal_output'] = terminal_data.content
+            context['terminal_history'] = TerminalLog.objects.filter(connection=get_uuid)
         except:
             pass
         return render(request, self.template_name, context)
@@ -79,7 +81,7 @@ class TerminalView(TemplateView):
                                         connection_id=get_uuid)
 
         TerminalHistory.objects.create(command=input,
-                                connection = get_uuid)
+                                       connection=get_uuid)
 
         # TODO also delete terminal history when connection is lost or after a day or something?
         # only keep the most recent 6 lines from the terminal history (delete older ones)
@@ -87,7 +89,6 @@ class TerminalView(TemplateView):
             max_datetime = TerminalHistory.objects.order_by('-timestamp')[5]
             delete_older = TerminalHistory.objects.filter(timestamp__lt=max_datetime.timestamp)
             delete_older.delete()
-
 
         return TerminalView.get(self, request, *args, **kwargs)
 

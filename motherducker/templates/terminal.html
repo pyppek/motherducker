@@ -46,10 +46,7 @@
           <div class="terminal">
           <div id="history" class="grey-text text-darken-1">
               {% for line in history %}
-
-              {% csrf_token %}
               <span class="timestamp">{{ line.timestamp|date:'Y-m-d H:i' }}</span><span class="command">{{ line.command }}</span><br>
-
               {% endfor %}
           </div>
               <form method="post">
@@ -57,10 +54,9 @@
               <span id="path">{{terminal}}&nbsp;</span>
                   {% csrf_token %}
                 <input type="text" name="terminal_input">
-
             </div>
                    </form>
-              <div style="height:550px;width:1250px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
+              <div class="terminal_output">
               {{terminal_output}}
               </div>
         </div>

