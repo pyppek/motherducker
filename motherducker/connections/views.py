@@ -4,11 +4,31 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from payloads.models import Payload, TerminalLog, ScriptLog, TerminalHistory
 from .models import Connection, ScriptData, TerminalData
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect
 import time
 
 
 class HomePageView(TemplateView):
     template_name = 'index.html'
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        context = {}
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            data = {"username": username, "password":password}
+            request.session['session'] = data
+            return redirect('installation')
+        else:
+            context['wrong_password'] = 'E-mail or password is incorrect'
+            return render(request, self.template_name, context)
 
 
 class InstallationView(TemplateView):
@@ -23,14 +43,39 @@ class InstallationView(TemplateView):
             response['Content-Length'] = len(response.content)
             return response
 
+    def get(self, request, *args, **kwargs):
+        try:
+            username = request.session['session']['username']
+            password = request.session['session']['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                context = {'username': request.session['session']['username']}
+                return render(request, self.template_name, context)
+            else:
+                return redirect('home')
+        except KeyError:
+            return redirect('home')
+
+
 
 class ConnectionsView(TemplateView):
     template_name = 'connections.html'
 
     def get(self, request, *args, **kwargs):
-        context = super(ConnectionsView, self).get_context_data(**kwargs)
-        context['connections'] = Connection.objects.all()
-        return render(request, self.template_name, context)
+        try:
+            username = request.session['session']['username']
+            password = request.session['session']['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                context = super(ConnectionsView, self).get_context_data(**kwargs)
+                context['connections'] = Connection.objects.all()
+                context['username'] = request.session['session']['username']
+                return render(request, self.template_name, context)
+            else:
+                return redirect('home')
+        except KeyError:
+            return redirect('home')
+
 
     def post(self, request, *args, **kwargs):
         context = {'connections': Connection.objects.all()}
@@ -126,3 +171,28 @@ class ConnectionDetailsView(TemplateView):
     def post(self, request, *args, **kwargs):
         context = {'uuid': self.kwargs.get('uuid')}
         return render(request, self.template_name, context)
+
+
+class RegisterView(TemplateView):
+    template_name = 'register.html'
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        context = {}
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
+        if request.POST.get('password_again') == password:
+            try:
+                user = User.objects.create_user(username, email, password)
+                user.save()
+                return redirect('home')
+            except:
+                context['wrong_password'] = "Passwords do not match!"
+                return render(request, self.template_name, context)
+        else:
+            context['wrong_password'] = "Passwords do not match!"
+            return render(request, self.template_name, context)

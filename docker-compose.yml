@@ -23,6 +23,8 @@ services:
                 sh -c
                 'python manage.py makemigrations &&
                 python manage.py migrate &&
+                python manage.py loaddata payloads_fixture.json &&
+                
                 python manage.py runserver ${WEB_HOST}:${WEB_PORT}'
             volumes:
                 - .:/code
