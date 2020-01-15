@@ -19,19 +19,22 @@
     </head>
     <body class="grey darken-3">
   <nav class="deep-purple accent-3" role="navigation">
-    <div class="nav-wrapper container">{{username}}<a id="logo-container" href="{% url 'home' %}" class="brand-logo"><img src="{% static "images/ducky-inthewater.png" %}" alt="motherducker logo"></a>
+    <div class="nav-wrapper container"><a id="logo-container" href="{% url 'home' %}" class="brand-logo"><img src="{% static "images/ducky-inthewater.png" %}" alt="motherducker logo"></a>
       <ul class="right hide-on-med-and-down">
           <li><a href="{% url 'installation' %}">Installation</a></li>
           <li><a href="{% url 'connections' %}">Connections</a></li>
           <li><a href="{% url 'terminal' uuid=uuid%}">Terminal</a></li>
           <li><a href="{% url 'scripts' uuid=uuid%}">Scripts</a></li>
           <li><a href="{% url 'details' uuid=uuid %}">Details</a></li>
+          <li class="account">
+              <a href="#"><i class="material-icons">account_circle</i> <span class="usr">{{username}}</span></a>
+          </li>
           <li>
-          <form method="post">
-              {% csrf_token %}
-              <input type="hidden" value="Logout" id="logout">
-              <a href="{% url 'home' %}">Logout</a>
-          </form>
+              <form method="post">
+                  {% csrf_token %}
+                  <input type="hidden" value="Logout" id="logout">
+                  <a href="{% url 'home' %}">Logout</a>
+              </form>
           </li>
       </ul>
 
