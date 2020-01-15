@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>Motherducker app</title>
+    <link rel="shortcut icon" href="{% static "images/favicon.ico" %}" type="image/x-icon">
+    <link rel="icon" href="{% static "images/favicon.ico" %}" type="image/x-icon">
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="{% static "css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body class="grey darken-3">
+  <nav class="deep-purple accent-3" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="{% url 'home' %}" class="brand-logo"><img src="{% static "images/ducky-inthewater.png" %}" alt="motherducker logo"></a>
+    </div>
+  </nav>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container deep-purple-text text-lighten-4">
+      <br><br>
+      <h1 class="header center">Motherducker app</h1>
+      <div class="row center">
+            <img src="https://media.giphy.com/media/rtRflhLVzbNWU/giphy.gif" width="200px" height="auto"/>
+      </div>
+      <div class="row center">
+          <form method="post">
+            {% csrf_token %}
+            {{ wrong_password }} <br>
+            Username: <input type="text" name="username"><br>
+              E-Mail: <input type="text" name="email"><br>
+            Password: <input type="password" name="password"><br>
+            Type password again: <input type="password" name="password_again"><br>
+            <input type="submit" value="Register" id="register-button" class="btn-large amber darken-4">
+          </form>
+      </div>
+    </div>
+  </div>
+
+  <footer class="page-footer grey darken-4">
+    <div class="footer-copyright">
+      <div class="container">
+      Made by AAVE
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="{% static "js/materialize.js" %}"></script>
+  <script src="{% static "js/init.js" %}"></script>
+
+  </body>
+</html>

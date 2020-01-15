@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import HomePageView, ConnectionsView, ScriptsView, ConnectionDetailsView, TerminalView, InstallationView
+from .views import HomePageView, ConnectionsView, ScriptsView, ConnectionDetailsView, TerminalView, InstallationView, RegisterView
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
+    path('register', RegisterView.as_view(), name='register'),
     path('installation', InstallationView.as_view(), name='installation'),
     path('installation/digistump_installation', InstallationView.download_digistump_installation, name='digistump_installation'),
     path('connections', ConnectionsView.as_view(), name='connections'),

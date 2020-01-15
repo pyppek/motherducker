@@ -28,11 +28,12 @@
       <div class="row center">
           <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            Username: <input type="text" name="fname"><br>
-            Password: <input type="text" name="lname"><br>
+              {{ wrong_password }} <br>
+            Username: <input type="text" name="username"><br>
+            Password: <input type="password" name="password"><br>
+              <input type="submit" value="Login" id="Login-button" class="btn-large amber darken-4">
+              <a href="{% url 'register' %}" id="register-button" class="btn-large amber darken-4">Register</a>
           </form>
-        <a href="{% url 'installation' %}" id="download-button" class="btn-large amber darken-4">Login</a>
       </div>
     </div>
   </div>
