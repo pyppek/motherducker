@@ -21,19 +21,29 @@
   <div class="section no-pad-bot" id="index-banner">
     <div class="container deep-purple-text text-lighten-4">
       <br><br>
-      <h1 class="header center">Motherducker app</h1>
+      <h1 class="header center">Motherducker</h1>
       <div class="row center">
-            <img src="https://media.giphy.com/media/rtRflhLVzbNWU/giphy.gif" width="200px" height="auto"/>
+            <img src="https://media.giphy.com/media/rtRflhLVzbNWU/giphy.gif" width="100px" height="auto"/>
       </div>
       <div class="row center">
-          <form method="post">
-            {% csrf_token %}
-              {{ wrong_password }} <br>
-            Username: <input type="text" name="username"><br>
-            Password: <input type="password" name="password"><br>
-              <input type="submit" value="Login" id="Login-button" class="btn-large amber darken-4">
-              <a href="{% url 'register' %}" id="register-button" class="btn-large amber darken-4">Register</a>
+          <div class="col s3"></div>
+          <form method="post" class="col s6 center">
+            <div class="row">
+              {% csrf_token %}
+              <span class="amber-text text-darken-4">{{ wrong_password }}</span><br>
+              <div class="input-field col s6">
+                <input id="username" type="text" name="username" class="deep-purple-text text-lighten-4">
+                <label for="username">Username</label>
+              </div>
+              <div class="input-field col s6">
+                <input id="password" type="password" name="password" class="deep-purple-text text-lighten-4">
+                <label for="password">Password</label>
+              </div>
+            </div>
+            <input type="submit" value="Login" id="Login-button" class="btn-large amber darken-4">
+            <a href="{% url 'register' %}" id="register-button" class="btn-large grey darken-4">Register</a>
           </form>
+          <div class="col s3"></div>
       </div>
     </div>
   </div>

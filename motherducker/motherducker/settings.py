@@ -22,7 +22,7 @@ SECRET_KEY = os.environ['SECRET']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [os.environ['WEB_HOST'], 'dilkovak-ubuntuvm.mshome.net']
+ALLOWED_HOSTS = [os.environ['WEB_HOST']]
 
 
 # Application definition
@@ -35,9 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'connections',
-    'payloads',
-    # 'django-filter'
+    #'connections',
+    #'payloads'
 ]
 
 MIDDLEWARE = [

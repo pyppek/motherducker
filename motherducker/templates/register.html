@@ -21,18 +21,28 @@
   <div class="section no-pad-bot" id="index-banner">
     <div class="container deep-purple-text text-lighten-4">
       <br><br>
-      <h1 class="header center">Motherducker app</h1>
+      <h1 class="header center">Register</h1>
       <div class="row center">
-            <img src="https://media.giphy.com/media/rtRflhLVzbNWU/giphy.gif" width="200px" height="auto"/>
-      </div>
-      <div class="row center">
-          <form method="post">
+          <div class="col s3"></div>
+          <form method="post" class="col s6 center">
             {% csrf_token %}
-            {{ wrong_password }} <br>
-            Username: <input type="text" name="username"><br>
-              E-Mail: <input type="text" name="email"><br>
-            Password: <input type="password" name="password"><br>
-            Type password again: <input type="password" name="password_again"><br>
+              <span class="amber-text text-darken-4">{{ wrong_password }}</span><br>
+            <div class="input-field col s6">
+                <input id="username" type="text" name="username" class="deep-purple-text text-lighten-4">
+                <label for="username">Username</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="email" type="text" name="email" class="deep-purple-text text-lighten-4">
+                <label for="email">Email address</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="password" type="password" name="password" class="deep-purple-text text-lighten-4">
+                <label for="password">Password</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="password_again" type="password" name="password_again" class="deep-purple-text text-lighten-4">
+                <label for="password_again">Type password again</label>
+            </div>
             <input type="submit" value="Register" id="register-button" class="btn-large amber darken-4">
           </form>
       </div>
