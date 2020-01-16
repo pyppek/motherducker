@@ -123,4 +123,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '/var/www/motherducker'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'), 'static',
+)
+
+STATIC_ROOT = '/var/www/motherducker/static'
