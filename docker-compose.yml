@@ -2,34 +2,39 @@ version: '3.3'
 
 services:
         db:
-            image: postgres
-            environment: 
-                - POSTGRES_DB=${DB_NAME}
-                - POSTGRES_USER=${DB_USER}
-                - POSTGRES_PASSWORD=${DB_PASS}
+            image: postgres:12.1-alpine
+            env_file: 
+                - settings.env
             volumes:
-                - ./motherducker/data:/var/lib/postgresql/data
+                - ./motherducker/pgdata:/var/lib/postgresql/data
         web:
-            environment: 
-                - SECRET=${SECRET}
-                - WEB_HOST=${WEB_HOST}
-                - DB_NAME=${DB_NAME}
-                - DB_USER=${DB_USER}
-                - DB_PASS=${DB_PASS}
-                - DB_HOST=${DB_HOST}
-                - DB_PORT=${DB_PORT}
-            build: .
+            build: ./motherducker
+            env_file:
+                - settings.env
+            volumes:
+                - ./motherducker:/opt/motherducker
+                - static_volume:/var/www/motherducker/static
             command: >
                 sh -c
                 'python manage.py makemigrations &&
-                python manage.py migrate &&
-                python manage.py loaddata payloads_fixture.json &&
-                
-                python manage.py runserver ${WEB_HOST}:${WEB_PORT}'
-            volumes:
-                - .:/code
-            ports:
-                - '${WEB_PORT}:${WEB_PORT}'
+                 python manage.py migrate &&
+                 python manage.py loaddata payloads_fixture.json &&
+                 python manage.py collectstatic --no-input &&
+
+                 gunicorn motherducker.wsgi:application --workers=2 --bind=[::]:80'
+            expose:
+                - 80
             depends_on:
                 - db
             restart: on-failure
+        nginx:
+            build: ./nginx
+            volumes:
+                - static_volume:/var/www/motherducker/static
+            ports:
+                - 80:80
+            depends_on:
+                - web
+
+volumes:
+    static_volume:
