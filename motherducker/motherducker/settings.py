@@ -22,7 +22,7 @@ SECRET_KEY = os.environ['SECRET']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [os.environ['WEB_HOST'], 'dilkovak-ubuntuvm.mshome.net']
+ALLOWED_HOSTS = [os.environ['WEB_HOST'], 'ubuntu-pc.mshome.net']
 
 
 # Application definition
@@ -123,11 +123,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'static'), '/static/',
-# )
 STATICFILES_DIRS = (
-     '/var/www/dilkovak-ubuntuvm.mshome.net/static/static',
+    os.path.join(BASE_DIR, 'static'), 'static',
 )
 
-STATIC_ROOT = '/var/www/dilkovak-ubuntuvm.mshome.net/static/static'
+
+STATIC_ROOT = '/var/www/motherducker/static'

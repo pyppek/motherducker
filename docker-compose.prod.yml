@@ -24,7 +24,7 @@ services:
             command: "gunicorn --bind 0.0.0.0:8000 motherducker.wsgi:application"
             volumes:
                 - .:/code
-                - static_volume:/var/www/dilkovak-ubuntuvm.mshome.net/static/static
+                - static_volume:/var/www/motherducker/static
             expose:
                 - '${WEB_PORT}'
             depends_on:
@@ -33,7 +33,7 @@ services:
         nginx:
             build: ./nginx
             volumes:
-                - static_volume:/var/www/dilkovak-ubuntuvm.mshome.net/static/static
+                - static_volume:/var/www/motherducker/static
             ports:
                 - 80:80
             depends_on:
