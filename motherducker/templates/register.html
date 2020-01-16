@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>Motherducker app</title>
+    <link rel="shortcut icon" href="{% static "images/favicon.ico" %}" type="image/x-icon">
+    <link rel="icon" href="{% static "images/favicon.ico" %}" type="image/x-icon">
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="{% static "css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body class="grey darken-3">
+  <nav class="deep-purple accent-3" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="{% url 'home' %}" class="brand-logo"><img src="{% static "images/ducky-inthewater.png" %}" alt="motherducker logo"></a>
+    </div>
+  </nav>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container deep-purple-text text-lighten-4">
+      <br><br>
+      <h1 class="header center">Register</h1>
+      <div class="row center">
+          <div class="col s3"></div>
+          <form method="post" class="col s6 center">
+            {% csrf_token %}
+              <span class="amber-text text-darken-4">{{ wrong_password }}</span><br>
+            <div class="input-field col s6">
+                <input id="username" type="text" name="username" class="deep-purple-text text-lighten-4">
+                <label for="username">Username</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="email" type="text" name="email" class="deep-purple-text text-lighten-4">
+                <label for="email">Email address</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="password" type="password" name="password" class="deep-purple-text text-lighten-4">
+                <label for="password">Password</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="password_again" type="password" name="password_again" class="deep-purple-text text-lighten-4">
+                <label for="password_again">Type password again</label>
+            </div>
+            <input type="submit" value="Register" id="register-button" class="btn-large amber darken-4">
+          </form>
+      </div>
+    </div>
+  </div>
+
+  <footer class="page-footer grey darken-4">
+    <div class="footer-copyright">
+      <div class="container">
+      Made by AAVE
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="{% static "js/materialize.js" %}"></script>
+  <script src="{% static "js/init.js" %}"></script>
+
+  </body>
+</html>

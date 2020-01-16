@@ -1,5 +1,5 @@
-# motherducker
-SecurityLab project 3 - Team Aave
+# Motherducker
+Security Lab security engineering project - Team Aave
 
 * Velid
 * Elom
@@ -8,16 +8,17 @@ SecurityLab project 3 - Team Aave
 * Pyry
 * Waltteri
 
+# Instructions
 
-## TODO
-### Week 1
-| Task                                        | Assignee        | Status            |
-|:--------------------------------------------|:---------------:|:-----------------:|
-|GitHub repository                            | Pyry            |:heavy_check_mark: |
-|project management method                    | Velid           |:heavy_check_mark: |
-|webinterface tech                            | Lana            |:x:                |
-|how to connect rubberducky to webinterface   | Teemu           |:x:                |
-|how to ducky script                          | Walde           |:x:                |
-|usb to rubberducky                           | Velid           |:x:                |
-|motherducker functionality                   | Pyry            |:x:                |
-|secure coding practices                      | Elom            |:x:                |
+## Prerequisites
+* docker installed
+* docker-compose installed
+
+## Setup
+Run in your project folder (contains Dockerfile, docker-compose.yml) to start containers:
+> docker-compose up 
+
+You should be able to develop 'live' with the container running.
+
+You have to re-build the image if you add requirements.
+> docker-compose build

@@ -51,7 +51,6 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
-settings.py
 */*/migrations/0*.py
 */media/*
 
@@ -76,9 +75,6 @@ target/
 
 # celery beat schedule file
 celerybeat-schedule
-
-# dotenv
-.env
 
 # virtualenv
 venv/

@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Motherducker Scripts</title>
+    <link rel="shortcut icon" href="{% static "images/favicon.ico" %}" type="image/x-icon">
+    <link rel="icon" href="{% static "images/favicon.ico" %}" type="image/x-icon">
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="{% static "css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body class="grey darken-3">
+  <nav class="deep-purple accent-3" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="{% url 'home' %}" class="brand-logo"><img src="{% static "images/ducky-inthewater.png" %}" alt="motherducker logo"></a>
+      <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'installation' %}">Installation</a></li>
+          <li><a href="{% url 'connections' %}">Connections</a></li>
+          <li><a href="{% url 'terminal' uuid=uuid %}">Terminal</a></li>
+          <li><a href="{% url 'scripts' uuid=uuid %}">Scripts</a></li>
+          <li><a href="{% url 'details' uuid=uuid %}">Details</a></li>
+          <li class="account">
+              <a href="#"><i class="material-icons">account_circle</i> <span class="usr">{{username}}</span></a>
+          </li>
+          <li>
+              <form method="post">
+                  {% csrf_token %}
+                  <input type="hidden" value="Logout" id="logout">
+                  <a href="{% url 'home' %}">Logout</a>
+              </form>
+          </li>
+      </ul>
+
+      <ul id="nav-mobile" class="sidenav">
+          <li><a href="{% url 'installation' %}">Installation</a></li>
+          <li><a href="{% url 'connections' %}">Connections</a></li>
+          <li><a href="{% url 'terminal' uuid=uuid %}">Terminal</a></li>
+          <li><a href="{% url 'scripts' uuid=uuid %}">Scripts</a></li>
+          <li><a href="{% url 'details' uuid=uuid %}">Details</a></li>
+          <li>
+          <form method="post">
+              {% csrf_token %}
+              <input type="hidden" value="Logout" id="logout">
+              <a href="{% url 'home' %}">Logout</a>
+          </form>
+          </li>
+      </ul>
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container deep-purple-text text-lighten-4">
+      <br><br>
+      <h1 class="header">Scripts</h1>
+      <div class="row">
+          <ul class="collection">
+              <li class="collection-item grey-text text-darken-4 deep-purple lighten-4 coll-head">Name<div class="secondary-content grey-text text-darken-4">Description</div>
+              </li>
+              {% for payload in payloads %}
+                <form method="post">
+                    {% csrf_token %}
+                    <button class="collection-item grey-text text-darken-4" type="submit" name="payload" value="{{ payload.payload }} ">{{ payload.payload_name }}<div class="secondary-content grey-text text-darken-2">{{ payload.payload_description }}</div></button>
+                    <input type="hidden" value="{{ payload.payload_name }}" name="payload_name">
+                </form>
+              {% endfor %}
+          </ul>
+      </div>
+    </div>
+  </div>
+
+  <footer class="page-footer grey darken-4">
+    <div class="footer-copyright">
+      <div class="container">
+      Made by AAVE
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="{% static "js/materialize.js" %}"></script>
+  <script src="{% static "js/init.js" %}"></script>
+
+  </body>
+</html>
