@@ -22,7 +22,7 @@ SECRET_KEY = os.environ['SECRET']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [os.environ['WEB_HOST']]
+ALLOWED_HOSTS = [os.environ['WEB_HOST'], 'dilkovak-ubuntuvm.mshome.net']
 
 
 # Application definition
@@ -35,8 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    #'connections',
-    #'payloads'
+    'connections',
+    'payloads'
 ]
 
 MIDDLEWARE = [
@@ -123,6 +123,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'static'), '/static/',
+# )
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'), '/static/',
+     '/var/www/dilkovak-ubuntuvm.mshome.net/static/static',
 )
+
+STATIC_ROOT = '/var/www/dilkovak-ubuntuvm.mshome.net/static/static'
