@@ -80,7 +80,6 @@ celerybeat-schedule
 venv/
 ENV/
 
-
 # Spyder project settings
 .spyderproject
 
@@ -89,3 +88,6 @@ ENV/
 
 # PyCharm
 .idea
+
+# PostgreSQL
+pgdata/
