@@ -14,7 +14,7 @@ add-type @"
 $uuid = (Get-WmiObject -Class Win32_ComputerSystemProduct).UUID
 
 # URL NEEDS TO BE CHANGED ONCE DEPLOYED
-$main_url = "https://ubuntu-pc.mshome.net"
+$main_url = "https://145.24.222.156"
 
 $register_url = $main_url + "/api/register/"
 
