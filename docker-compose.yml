@@ -3,7 +3,7 @@ version: '3.3'
 services:
         db:
             image: postgres:12.1-alpine
-            env_file:
+            env_file: 
                 - settings.env
             volumes:
                 - ./motherducker/pgdata:/var/lib/postgresql/data
@@ -20,6 +20,7 @@ services:
                  python manage.py migrate &&
                  python manage.py loaddata payloads_fixture.json &&
                  python manage.py collectstatic --no-input &&
+
                  gunicorn motherducker.wsgi:application --workers=2 --bind=[::]:80'
             expose:
                 - 80
