@@ -71,13 +71,11 @@ class ConnectionTestCase(TestCase):
     def test_terminal_page_unauthorized(self):
         connection = Connection.objects.get(uuid="8bb5a620-6554-4081-9dc2-e2dbc23bd8c2")
         client = Client()
-        response_get = client.get(f'/connections/{str(connection.uuid).upper()}/details')
+        response_get = client.get(f'/connections/{str(connection.uuid).upper()}/terminal')
         self.assertEqual(response_get.status_code, 302)
 
     def test_details_page_unauthorized(self):
         connection = Connection.objects.get(uuid="8bb5a620-6554-4081-9dc2-e2dbc23bd8c2")
         client = Client()
-        response_get = client.get(f'/connections/{str(connection.uuid).upper()}/terminal')
+        response_get = client.get(f'/connections/{str(connection.uuid).upper()}/details')
         self.assertEqual(response_get.status_code, 302)
-
-    
