@@ -17,12 +17,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#x369vo^fd5bwf=_!=p6o!av11v^pz804%8)4dy%!3hihewb!!'
+SECRET_KEY = os.environ['SECRET']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.getenv('DEBUG', 0))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ['WEB_HOSTS'].split(',')
 
 
 # Application definition
@@ -76,11 +76,11 @@ WSGI_APPLICATION = 'motherducker.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'motherducker_db',
-        'USER': 'postgres',
-        'PASSWORD': 'toor',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'NAME': os.environ['POSTGRES_DB'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
@@ -124,5 +124,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'), '/static/',
+    os.path.join(BASE_DIR, 'static'),
 )
+
+STATIC_ROOT = '/var/www/motherducker/static'
