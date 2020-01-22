@@ -40,7 +40,6 @@ def terminal_api(request, uuid):
     if request.method == 'GET':
         try:
             connection = Connection.objects.get(uuid=uuid)
-            print(connection)
             terminal_data = TerminalData.objects.get(connection_id=connection)
             terminal = {'active': True, 'uuid': str(terminal_data.connection_id.uuid).upper(), 'input': terminal_data.input,
                         'terminal': True}

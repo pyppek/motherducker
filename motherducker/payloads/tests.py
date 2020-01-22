@@ -15,7 +15,7 @@ class PayloadTestCase(TestCase):
                                                   current_directory='test_current_directory')
         script_log = ScriptLog.objects.create(payload=payload, connection=connection, content='test_content')
         terminal_history = TerminalHistory.objects.create(connection=connection, command='test_command')
-        # terminal_data = TerminalData.objects.create(input="test_terminal_data_input", connection_id=connection)
+        terminal_data = TerminalData.objects.create(input="test_terminal_data_input", connection_id=connection)
         script_data = ScriptData.objects.create(input='test_script_data_input', connection_id=connection,
                                                 payload_name='test_payload_name')
 
@@ -33,7 +33,7 @@ class PayloadTestCase(TestCase):
     def test_backdoor_api(self):
         connection_uuid = Connection.objects.get(uuid="8bb5a620-6554-4081-9dc2-e2dbc23bd8c2").uuid
         script_payload = ScriptData.objects.get(input='test_script_data_input')
-        client = Client(enforce_csrf_checks=True)
+        client = Client()
         response = client.get(f'/payloads/backdoor_api/{connection_uuid}')
         json = response.json()
         self.assertEqual(json['active'], True)
@@ -44,13 +44,10 @@ class PayloadTestCase(TestCase):
 
     def test_terminal_api(self):
         connection_uuid = Connection.objects.get(uuid="8bb5a620-6554-4081-9dc2-e2dbc23bd8c2").uuid
-        connection_uuid2 = Connection.objects.get(uuid="8bb5a620-6554-4081-9dc2-e2dbc23bd8c2")
-        print(TerminalData.objects.get(connection_id=connection_uuid2))
-        terminal_input = TerminalData.objects.get(connection_id=connection_uuid)
-        client = Client(enforce_csrf_checks=True)
+        terminal_input = TerminalData.objects.get(input="test_terminal_data_input")
+        client = Client()
         response = client.get(f'/payloads/terminal_api/{connection_uuid}')
         json = response.json()
-        print(json)
         self.assertEqual(json['active'], True)
         self.assertEqual(json['uuid'], str(connection_uuid).upper())
         self.assertEqual(json['input'], terminal_input.input)
