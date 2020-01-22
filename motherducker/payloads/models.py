@@ -32,7 +32,7 @@ class ScriptLog(models.Model):
 
 
 class TerminalHistory(models.Model):
-    # TODO timezone is not correct with "auto_now_add"
+    # TODO timezone is not correct
     timestamp = models.DateTimeField(auto_now_add=True)
     command = models.TextField()
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE)

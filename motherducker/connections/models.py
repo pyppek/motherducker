@@ -16,5 +16,7 @@ class TerminalData(models.Model):
     connection_id = models.ForeignKey(Connection, on_delete=models.CASCADE)
 
 
-class ScriptData(TerminalData):
+class ScriptData(models.Model):
+    input = models.TextField()
+    connection_id = models.ForeignKey(Connection, on_delete=models.CASCADE)
     payload_name = models.TextField()
