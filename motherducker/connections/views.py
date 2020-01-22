@@ -14,7 +14,6 @@ class HomePageView(TemplateView):
     template_name = 'index.html'
 
     def get(self, request, *args, **kwargs):
-        print(request.session)
         try:
             if request.session['session']['username'] and request.session['session']['password']:
                 request.session.flush()
@@ -61,7 +60,6 @@ class InstallationView(TemplateView):
                 return redirect('home')
         except KeyError:
             return redirect('home')
-
 
 
 class ConnectionsView(TemplateView):
