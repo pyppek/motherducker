@@ -31,7 +31,7 @@ class TerminalLogSerializer(serializers.ModelSerializer):
         content = validated_data.pop('content')
         current_dir = validated_data.pop('current_directory')
         connection, _ = Connection.objects.get_or_create(uuid=uuid.uuid)
-        terminal_log, _ = TerminalLog.objects.get_or_create(connection=connection, content=content, current_directory=current_dir)
+        terminal_log, _ = TerminalLog.objects.create(connection=connection, content=content, current_directory=current_dir)
         return terminal_log
 
 

@@ -39,3 +39,11 @@ class TerminalHistory(models.Model):
 
     def __str__(self):
         return self.command
+
+
+class TerminalInputs(models.Model):
+    input = models.TextField(blank=True, null=True)
+
+
+class ScriptInputs(models.Model):
+    input = models.TextField(blank=True, null=True)

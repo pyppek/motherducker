@@ -16,7 +16,7 @@ services:
                 - static_volume:/var/www/motherducker/static
             command: >
                 sh -c
-                'rm */migrations/0*.py &&
+                 'rm */migrations/0*.py &&
                  python manage.py makemigrations &&
                  python manage.py migrate &&
                  python manage.py loaddata payloads_fixture.json &&
